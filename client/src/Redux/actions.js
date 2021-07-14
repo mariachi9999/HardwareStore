@@ -29,6 +29,8 @@ import {
 
 import axios from 'axios';
 
+const {REACT_APP_API_HEROKU} = process.env
+
 export const fetchPending = () => ({
 	type: FETCH_PENDING,
 });
@@ -82,7 +84,7 @@ export function getSuggestions(name) {
 
 export function getProducts() {
 	return async (dispatch) => {
-		axios.get('/products/').then((response) => {
+		axios.get(`${REACT_APP_API_HEROKU}/products/`).then((response) => {
 			dispatch({ type: GET_PRODUCTS, payload: response.data });
 		});
 	};
