@@ -82,7 +82,7 @@ export function getSuggestions(name) {
 
 export function getProducts() {
 	return async (dispatch) => {
-		axios.get('/products/').then((response) => {
+		axios.get('https://ecommerceherni.herokuapp.com/products/').then((response) => {
 			dispatch({ type: GET_PRODUCTS, payload: response.data });
 		});
 	};
