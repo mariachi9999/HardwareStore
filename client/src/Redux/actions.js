@@ -29,7 +29,7 @@ import {
 
 import axios from 'axios';
 
-const {REACT_APP_API_HEROKU} = process.env
+const {REACT_APP_API, REACT_APP_API_HEROKU} = process.env
 
 export const fetchPending = () => ({
 	type: FETCH_PENDING,
