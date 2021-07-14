@@ -4,6 +4,7 @@ const fs = require('fs');
 const path = require('path');
 const { DB_USER, DB_PASSWORD, DB_HOST, DB_NAME } = process.env;
 
+//esto lo necesita postgres en deploy
 let sequelize =
   process.env.NODE_ENV === "production"
     ? new Sequelize({
