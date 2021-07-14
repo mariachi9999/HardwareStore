@@ -7,6 +7,7 @@ import { Provider } from 'react-redux'
 import store from './Redux/store'
 import {BrowserRouter} from 'react-router-dom';
 import './bootstrap.min.css';
+import axios from 'axios'
 
 import dotenv from 'dotenv'
 

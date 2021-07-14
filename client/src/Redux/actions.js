@@ -58,7 +58,7 @@ export function getListOfProductTable(page, object) {
 		try {
 			dispatch(fetchPending());
 			const res = await axios.post(
-				`http://localhost:3001/admin/tablepagination?page${page}`,
+				`/admin/tablepagination?page${page}`,
 				object
 			);
 			dispatch(fetchListProducts(res.data));
@@ -72,7 +72,7 @@ export function getSuggestions(name) {
 	return async (dispatch) => {
 		try {
 			dispatch(fetchPending());
-			const res = await axios.get('http://localhost:3001/products/');
+			const res = await axios.get('/products/');
 			dispatch(fetchSuggestions({ productSuggestions: res.data, name }));
 		} catch (error) {
 			dispatch(fetchError(error));
@@ -82,7 +82,7 @@ export function getSuggestions(name) {
 
 export function getProducts() {
 	return async (dispatch) => {
-		axios.get('http://localhost:3001/products/').then((response) => {
+		axios.get('/products/').then((response) => {
 			dispatch({ type: GET_PRODUCTS, payload: response.data });
 		});
 	};
@@ -90,7 +90,7 @@ export function getProducts() {
 
 export function getCategories() {
 	return async (dispatch) => {
-		axios.get('http://localhost:3001/categories/').then((response) => {
+		axios.get('/categories/').then((response) => {
 			dispatch({ type: GET_CATEGORIES, payload: response.data });
 		});
 	};
@@ -98,7 +98,7 @@ export function getCategories() {
 
 export function getBrands() {
 	return async (dispatch) => {
-		axios.get('http://localhost:3001/brands/').then((response) => {
+		axios.get('/brands/').then((response) => {
 			dispatch({ type: GET_BRANDS, payload: response.data });
 		});
 	};
@@ -107,7 +107,7 @@ export function getBrands() {
 export function getProductById(id) {
 	return async (dispatch) => {
 		axios
-			.get('http://localhost:3001/products/allproducts/' + id)
+			.get('/products/allproducts/' + id)
 			.then((response) => {
 				dispatch({ type: PRODUCT_DETAIL, payload: response.data });
 			});
@@ -116,7 +116,7 @@ export function getProductById(id) {
 
 export function getHighlightProd() {
 	return async (dispatch) => {
-		axios.get('http://localhost:3001/products').then((response) => {
+		axios.get('/products').then((response) => {
 			dispatch({ type: GET_HIGHLIGHTS, payload: response.data });
 		});
 	};
@@ -125,7 +125,7 @@ export function getHighlightProd() {
 export function logIn(dato) {
 	return async (dispatch) => {
 		try {
-			const res = await axios.post('http://localhost:3001/auth', dato);
+			const res = await axios.post('/auth', dato);
 			console.log('dato', dato);
 			dispatch({
 				type: SUCCESS_LOGIN,
@@ -157,7 +157,7 @@ export function authUser(data) {
 		}
 
 		try {
-			const res = await axios.get('http://localhost:3001/auth');
+			const res = await axios.get('/auth');
 			if (res.data.user) {
 				dispatch({
 					type: AUTH_USER,
@@ -182,7 +182,7 @@ export function forgotPassword(email) {
 	return async (dispatch) => {
 		try {
 			const res = await axios.put(
-				'http://localhost:3001/auth/forgot-password',
+				'/auth/forgot-password',
 				{ email }
 			);
 			let hola = res.data.msg;
@@ -211,7 +211,7 @@ export function forgotPassword(email) {
 export function resetPassword(resetLink, newPass) {
 	return async (dispatch) => {
 		try {
-			await axios.put('http://localhost:3001/auth/reset-password', {
+			await axios.put('/auth/reset-password', {
 				resetLink,
 				newPass,
 			});
@@ -233,7 +233,7 @@ export function loginGmail(data) {
 	console.log(data);
 	return async (dispatch) => {
 		try {
-			const res = await axios.post('http://localhost:3001/authGmail', data);
+			const res = await axios.post('/authGmail', data);
 			console.log('desde el action', res.data.token);
 
 			dispatch({
@@ -260,7 +260,7 @@ export function getFilteredProducts(query) {
 	return async (dispatch) => {
 		axios
 			.get(
-				`http://localhost:3001/catalog?category=${category}&brand=${brand}&price=${price}&page=${page}&qty=${qty}`
+				`/catalog?category=${category}&brand=${brand}&price=${price}&page=${page}&qty=${qty}`
 			)
 			.then((response) => {
 				dispatch({ type: FILTERED_PRODUCTS, payload: response.data });
@@ -283,7 +283,7 @@ export const addToCart = (itemId) => {
 	};
 };
 
-export const RemoveFromCart = (itemId) => {
+export const removeFromCart = (itemId) => {
 	return {
 		type: REMOVE_FROM_CART,
 		payload: {
