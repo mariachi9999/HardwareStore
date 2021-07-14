@@ -1,0 +1,60 @@
+.highlightProdContainer {
+	display: flex;
+	flex-direction: column;
+	justify-content: space-evenly;
+	background-color: white;
+	margin: 20px;
+	width: 250px;
+	height: 320px;
+	border-radius: 14px;
+}
+
+.highlightProdContainer:hover {
+	transform: scale(1.1);
+	transition: 400ms;
+}
+
+.ImageDiv {
+	display: flex;
+	height: 130px;
+	justify-content: center;
+}
+.ImageDiv img {
+	height: 100%;
+}
+
+.buyHighlightDiv {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	height: 60px;
+}
+
+.HighlightImagSize {
+	width: 150px;
+}
+
+.HighlightTextContainer {
+	display: flex;
+	flex-direction: column;
+	justify-content: space-evenly;
+	text-align: center;
+	height: 120px;
+	padding: 10px;
+	color: black;
+}
+
+.highlightLinks {
+	text-decoration: none;
+}
+
+.highlightLinks :hover {
+	color: #ff3c4a;
+	transition: 100ms;
+}
+
+.nameProduct {
+	min-height: 70.4px;
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
