@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-export const ButtonRed = styled.button`
+export const ButtonGrey = styled.button`
     width: 200px;    
     height: 40px;
     border-style: none;
@@ -16,4 +16,4 @@ export const ButtonRed = styled.button`
 
 `;
 
-export default ButtonRed;
+export default ButtonGrey;

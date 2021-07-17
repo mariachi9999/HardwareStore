@@ -12,7 +12,6 @@ export const ButtonRed = styled.button`
     &:hover{
         background-color: #cc242f;
     } 
-
 `;
 
 export default ButtonRed;

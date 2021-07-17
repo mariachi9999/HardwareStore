@@ -3,15 +3,19 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
-import { authUser, getSuggestions, logOut } from '../../Redux/actions';
+import Swal from 'sweetalert2';
+import CartModal from '../CartModal/CartModal';
+import {
+	authUser,
+	getSuggestions,
+	logOut,
+	cleanSuggestions,
+} from '../../Redux/actions';
 
 import LogoStyle from '../StyledComponents/LogoStyle';
-// import Modal from '../Modal/Modal';
 import styles from './Navbar.module.css';
 
 const Navbar = () => {
-	// const [isOpenModal, openModal, closeModal] = useModal(false);
-	// const [showLinks, setShowLinks] = useState(false);
 	const [display, setDisplay] = useState(false);
 	const [options, setOptions] = useState([]);
 	const [search, setSearch] = useState('');
@@ -20,13 +24,30 @@ const Navbar = () => {
 	const history = useHistory();
 	const token = useSelector((state) => state.user.token);
 
+	const userName = useSelector((state) => state.user.userData);
+	
+		
+		const errorToken = useSelector((state) => state.user.errorToken);
+		console.log(errorToken);
+		useEffect(() => {
+			if (errorToken) {
+				Swal.fire({
+					icon: 'error',
+					title: 'Oops...',
+					text: 'Your session has expired, please login again',
+				});
+				dispatch(logOut());
+			}
+		}, [errorToken]);
+
+
+	
+
 	//CARRITO
 	const [cartCount, SetCartCount] = useState(0);
 
 	const cart = useSelector((state) => state.cart.cart);
-	localStorage.setItem("cart", JSON.stringify(cart))
 
-	
 	useEffect(() => {
 		let count = 0;
 		if (cart !== null) {
@@ -35,9 +56,12 @@ const Navbar = () => {
 			});
 		}
 		SetCartCount(count);
+		localStorage.setItem('cart', JSON.stringify(cart));
 	}, [cart, cartCount]);
-	
 
+	useEffect(() => {
+		localStorage.setItem("userData", JSON.stringify(userName));
+	}, [userName]);
 
 	useEffect(() => {
 		axios
@@ -55,7 +79,6 @@ const Navbar = () => {
 		return () => {
 			document.removeEventListener('mousedown', handleClickOutside);
 		};
-
 	}, []);
 
 	const handleClickOutside = (event) => {
@@ -73,6 +96,7 @@ const Navbar = () => {
 	const searchProduct = (event) => {
 		event.preventDefault();
 		if (search.trim()) {
+			dispatch(cleanSuggestions());
 			history.push('/searchproduct');
 			dispatch(getSuggestions(search));
 			setSearch('');
@@ -80,27 +104,67 @@ const Navbar = () => {
 			setSearch('');
 		}
 	};
-	
 
 	<button onclick='myFunction()'>Click me</button>;
 	return (
-		<div className={styles.navbarEcommerce}>
-			<div className={styles.leftSideEcommerce}>
-				<div className={styles.storeNameEcommerce}>
-					<Link to='/'>
-						<LogoStyle>HardwareStore</LogoStyle>
-					</Link>
+		<>
+			<div className={styles.navbarEcommerce}>
+				<div className={styles.leftSideEcommerce}>
+					<div className={styles.storeNameEcommerce}>
+						<Link to='/'>
+							<LogoStyle>HardwareStore</LogoStyle>
+						</Link>
+					</div>
 				</div>
-			</div>
 
-			<div className={styles.rightSideEcommerce}>
+				<div className={styles.rightSideEcommerce}>
+					<div className={styles.theSearchBarEcommerce}>
+						<div
+							className={`${styles.flexContainerEcommerce} ${styles.flexColumnEcommerce} ${styles.posRelEcommerce}`}
+							ref={wrapperRef}
+						>
+					
+							<input
+								className={styles.inputEcommerce}
+								value={search}
+								onClick={() => setDisplay(!display)}
+								onChange={(event) => setSearch(event.target.value)}
+								placeholder='Search...'
+							/>
+							{display && (
+								<div className={styles.autoContainerEcommerce}>
+									{options
+										.filter((product) =>
+											product.toLowerCase().includes(search.toLowerCase())
+										)
+										.slice(0, 7)
+										.map((value, index) => {
+											return (
+												<div
+													className={styles.optionEcommerce}
+													onClick={() => searchHandle(value)}
+													key={index}
+													tabIndex='0'
+												>
+													<span className={styles.spanEcommerce}>{value}</span>
+												</div>
+											);
+										})}
+								</div>
+							)}
+
+							<button
+								className={styles.searchBtnEcommerce}
+								onClick={searchProduct}
+							>
+								<i className='fas fa-search'></i>
+							</button>
+						</div>
+					</div>
+				</div>
 				<div className={styles.linksNavEcommerce}>
-					<Link to='/'>Home</Link>
-					<Link to='/catalog'>Catalog</Link>
-					<Link to='/'>CarritoLOGO</Link>
-					<p>{cartCount}</p>
-
 					{token ? (
+						<div class='d-block mt-4'>
 						<button
 							type='submit'
 							className={styles.but}
@@ -110,54 +174,38 @@ const Navbar = () => {
 						>
 							Log Out
 						</button>
+						{Array.isArray(userName) ? <p class='text-white h6' >Hola {userName.email}!</p>
+						
+					:
+					<p class='text-white h6' >Hola {userName.name}!</p>
+				
+					}
+					
+						</div>
 					) : (
 						<>
-							<Link to='/register'>Sing Up</Link>
+							<Link to='/register'>Sign Up</Link>
 							<Link to='/LogIn'>Login</Link>
 						</>
 					)}
-				</div>
-
-				<div className={styles.theSearchBarEcommerce}>
-					<div
-						className={`${styles.flexContainerEcommerce} ${styles.flexColumnEcommerce} ${styles.posRelEcommerce}`}
-						ref={wrapperRef}
-					>
-						<input
-							className={styles.inputEcommerce}
-							value={search}
-							onClick={() => setDisplay(!display)}
-							onChange={(event) => setSearch(event.target.value)}
-							placeholder='Search...'
-						/>
-						{display && (
-							<div className={styles.autoContainerEcommerce}>
-								{options
-									.filter((product) =>
-										product.toLowerCase().includes(search.toLowerCase())
-									)
-									.slice(0, 7)
-									.map((value, index) => {
-										return (
-											<div
-												className={styles.optionEcommerce}
-												onClick={() => searchHandle(value)}
-												key={index}
-												tabIndex='0'
-											>
-												<span className={styles.spanEcommerce}>{value}</span>
-											</div>
-										);
-									})}
+					<div className={styles.cartLogoContainer}>
+						<CartModal />
+						{cartCount !== 0 ? (
+							<div className={styles.countCart}>
+								<p>{cartCount}</p>
 							</div>
-						)}
+						) : null}
 					</div>
-					<button className={styles.searchBtnEcommerce} onClick={searchProduct}>
-						<i className='fas fa-search'></i>
-					</button>
 				</div>
 			</div>
-		</div>
+			<div className={styles.sectionsContainer}>
+				<div className={styles.sections}>
+					<Link to='/'>Home</Link>
+					<Link to='/catalog'>Catalog</Link>
+					
+				</div>
+			</div>
+		</>
 	);
 };
 

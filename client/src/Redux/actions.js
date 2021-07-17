@@ -25,11 +25,52 @@ import {
 	ADJUST_ITEM_QTY,
 	LOAD_CURRENT_ITEM,
 	LIST_PRODUCT_ON_TABLE,
+	SIZE_PAGINATION,
+	ORDER_TABLE,
+	TABLE_FILTER_BY_CATEGORY,
+	SORT_TABLE_BY,
+	GET_USERS,
+	GOTO_TABLE_PAGE,
+	GET_USER_TO_EDIT,
+	SET_CART,
+	TABLE_FILTER_BRAND,
+	FILTER_STOCK,
+	ERRORTOKEN,
+	FETCH_COUNT_OF_BRAND,
+	FETCH_COUNT_OF_CATEGORIES,
 } from './actionsName';
 
 import axios from 'axios';
 
-const {REACT_APP_API, REACT_APP_API_HEROKU} = process.env
+export const changePaginationSize = (payload) => ({
+	type: SIZE_PAGINATION,
+	payload,
+});
+
+export const tableFilterByBrand = (payload) => ({
+	type: TABLE_FILTER_BRAND,
+	payload,
+});
+
+export const changeTablePage = (payload) => ({
+	type: GOTO_TABLE_PAGE,
+	payload,
+});
+
+export const sortTableAction = (payload) => ({
+	type: SORT_TABLE_BY,
+	payload,
+});
+
+export const tableFilterByCategory = (payload) => ({
+	type: TABLE_FILTER_BY_CATEGORY,
+	payload,
+});
+
+export const changeOrderTable = (payload) => ({
+	type: ORDER_TABLE,
+	payload,
+});
 
 export const fetchPending = () => ({
 	type: FETCH_PENDING,
@@ -50,6 +91,16 @@ export const fetchListProducts = (payload) => ({
 	payload,
 });
 
+export const fetchCountOfBrand = (payload) => ({
+	type: FETCH_COUNT_OF_BRAND,
+	payload,
+});
+
+export const fetchCountOfCategories = (payload) => ({
+	type: FETCH_COUNT_OF_CATEGORIES,
+	payload,
+});
+
 export const cleanSuggestions = () => ({
 	type: CLEAN_SUGGESTIONS,
 	payload: undefined,
@@ -60,10 +111,36 @@ export function getListOfProductTable(page, object) {
 		try {
 			dispatch(fetchPending());
 			const res = await axios.post(
-				`/admin/tablepagination?page${page}`,
+				`http://localhost:3001/admin/tablepagination?page=${page}`,
 				object
 			);
 			dispatch(fetchListProducts(res.data));
+		} catch (error) {
+			dispatch(fetchError(error));
+		}
+	};
+}
+
+export function getCountOfBrand() {
+	return async (dispatch) => {
+		try {
+			dispatch(fetchPending());
+			const res = await axios.get(`http://localhost:3001/admin/countofbrand`);
+			dispatch(fetchCountOfBrand(res.data));
+		} catch (error) {
+			dispatch(fetchError(error));
+		}
+	};
+}
+
+export function getCountOfCategories() {
+	return async (dispatch) => {
+		try {
+			dispatch(fetchPending());
+			const res = await axios.get(
+				`http://localhost:3001/admin/categoriescount`
+			);
+			dispatch(fetchCountOfCategories(res.data));
 		} catch (error) {
 			dispatch(fetchError(error));
 		}
@@ -74,7 +151,7 @@ export function getSuggestions(name) {
 	return async (dispatch) => {
 		try {
 			dispatch(fetchPending());
-			const res = await axios.get('/products/');
+			const res = await axios.get('http://localhost:3001/products/');
 			dispatch(fetchSuggestions({ productSuggestions: res.data, name }));
 		} catch (error) {
 			dispatch(fetchError(error));
@@ -84,7 +161,7 @@ export function getSuggestions(name) {
 
 export function getProducts() {
 	return async (dispatch) => {
-		axios.get(`${REACT_APP_API_HEROKU}/products/`).then((response) => {
+		axios.get('http://localhost:3001/products/').then((response) => {
 			dispatch({ type: GET_PRODUCTS, payload: response.data });
 		});
 	};
@@ -92,7 +169,7 @@ export function getProducts() {
 
 export function getCategories() {
 	return async (dispatch) => {
-		axios.get('/categories/').then((response) => {
+		axios.get('http://localhost:3001/categories/').then((response) => {
 			dispatch({ type: GET_CATEGORIES, payload: response.data });
 		});
 	};
@@ -100,7 +177,7 @@ export function getCategories() {
 
 export function getBrands() {
 	return async (dispatch) => {
-		axios.get('/brands/').then((response) => {
+		axios.get('http://localhost:3001/brands/').then((response) => {
 			dispatch({ type: GET_BRANDS, payload: response.data });
 		});
 	};
@@ -109,7 +186,7 @@ export function getBrands() {
 export function getProductById(id) {
 	return async (dispatch) => {
 		axios
-			.get('/products/allproducts/' + id)
+			.get('http://localhost:3001/products/allproducts/' + id)
 			.then((response) => {
 				dispatch({ type: PRODUCT_DETAIL, payload: response.data });
 			});
@@ -118,7 +195,7 @@ export function getProductById(id) {
 
 export function getHighlightProd() {
 	return async (dispatch) => {
-		axios.get('/products').then((response) => {
+		axios.get('http://localhost:3001/products').then((response) => {
 			dispatch({ type: GET_HIGHLIGHTS, payload: response.data });
 		});
 	};
@@ -126,20 +203,21 @@ export function getHighlightProd() {
 
 export function logIn(dato) {
 	return async (dispatch) => {
-		try {
-			const res = await axios.post('/auth', dato);
-			console.log('dato', dato);
-			dispatch({
-				type: SUCCESS_LOGIN,
-				payload: res.data.token,
-			});
-		} catch (error) {
-			dispatch({
-				type: ERROR,
-				payload: error.response.data.msg,
-			});
-		}
-	};
+	try {
+		const res = await axios.post('http://localhost:3001/auth', dato);
+		console.log(res)
+		dispatch({
+			type: SUCCESS_LOGIN,
+			payload: res.data,
+		});
+	} catch (error) {
+
+		dispatch({
+			type: ERROR,
+			payload: error.response.data.msg,
+		});
+	}
+};
 }
 
 // Retorne el Usuario autenticado en base al JWT
@@ -159,11 +237,17 @@ export function authUser(data) {
 		}
 
 		try {
-			const res = await axios.get('/auth');
+			const res = await axios.get('http://localhost:3001/auth');
+			console.log(res.data.msg.message);
 			if (res.data.user) {
 				dispatch({
 					type: AUTH_USER,
 					payload: res.data,
+				});
+			} else {
+				dispatch({
+					type: ERRORTOKEN,
+					payload: res.data.msg.message,
 				});
 			}
 		} catch (error) {
@@ -184,7 +268,7 @@ export function forgotPassword(email) {
 	return async (dispatch) => {
 		try {
 			const res = await axios.put(
-				'/auth/forgot-password',
+				'http://localhost:3001/auth/forgot-password',
 				{ email }
 			);
 			let hola = res.data.msg;
@@ -195,7 +279,6 @@ export function forgotPassword(email) {
 					hola,
 				},
 			});
-			console.log('desde el action', res.data.msg);
 		} catch (error) {
 			dispatch({
 				type: ERROR,
@@ -213,7 +296,7 @@ export function forgotPassword(email) {
 export function resetPassword(resetLink, newPass) {
 	return async (dispatch) => {
 		try {
-			await axios.put('/auth/reset-password', {
+			await axios.put('http://localhost:3001/auth/reset-password', {
 				resetLink,
 				newPass,
 			});
@@ -231,16 +314,13 @@ export function resetPassword(resetLink, newPass) {
 }
 
 export function loginGmail(data) {
-	console.log('llego a loginGmail');
-	console.log(data);
 	return async (dispatch) => {
 		try {
-			const res = await axios.post('/authGmail', data);
-			console.log('desde el action', res.data.token);
-
+			const res = await axios.post('http://localhost:3001/authGmail', data);
+			console.log(res)
 			dispatch({
 				type: SUCCESS_LOGIN,
-				payload: res.data.token,
+				payload: res.data,
 			});
 		} catch (error) {
 			console.log(error);
@@ -252,17 +332,21 @@ export const filterCategory = (name) => {
 	return { type: FILTER_CATEGORIES, payload: name };
 };
 
+export const filterStock = (name) => {
+	return { type: FILTER_STOCK, payload: name };
+};
+
 export const filterPrice = (name) => {
 	return { type: FILTER_PRICE, payload: name };
 };
 
 export function getFilteredProducts(query) {
-	const { category, brand, price, page, qty } = query;
+	const { category, brand, price, page, qty, stock } = query;
 
 	return async (dispatch) => {
 		axios
 			.get(
-				`/catalog?category=${category}&brand=${brand}&price=${price}&page=${page}&qty=${qty}`
+				`http://localhost:3001/catalog?category=${category}&brand=${brand}&price=${price}&page=${page}&qty=${qty}&stock=${stock}`
 			)
 			.then((response) => {
 				dispatch({ type: FILTERED_PRODUCTS, payload: response.data });
@@ -313,3 +397,105 @@ export const loadCurrentItem = (itemId) => {
 		},
 	};
 };
+
+/////////////////////////////////////////////// ADMINISTRADOR//////////
+
+export function modifyProduct(elem) {
+	return async () => {
+		try {
+			await axios.put('http://localhost:3001/admin/putproduct', elem);
+		} catch (error) {
+			console.log(error);
+		}
+	};
+}
+
+export function modifyCateogry(elem) {
+	return async () => {
+		try {
+			await axios.put('http://localhost:3001/admin/putcategory', elem);
+		} catch (error) {
+			console.log(error);
+		}
+	};
+}
+
+export function modifyBrand(elem) {
+	return async () => {
+		try {
+			await axios.put('http://localhost:3001/admin/putbrand', elem);
+		} catch (error) {
+			console.log(error);
+		}
+	};
+}
+
+export function createdBrand(elem) {
+	return async () => {
+		try {
+			await axios.post('http://localhost:3001/admin/createdbrand', elem);
+		} catch (error) {
+			console.log(error);
+		}
+	};
+}
+
+export function createdCategory(elem) {
+	return async () => {
+		try {
+			await axios.post('http://localhost:3001/admin/addCategory', elem);
+		} catch (error) {
+			console.log(error);
+		}
+	};
+}
+
+export function createdProduct(elem) {
+	return async () => {
+		try {
+			await axios.post('http://localhost:3001/admin/addproduct', elem);
+		} catch (error) {
+			console.log(error);
+		}
+	};
+}
+
+export function getUsers() {
+	return async (dispatch) => {
+		axios.get('http://localhost:3001/admin/users').then((response) => {
+			dispatch({ type: GET_USERS, payload: response.data });
+		});
+	};
+}
+
+export function getUserToEdit(email) {
+	return async (dispatch) => {
+		axios.get(`http://localhost:3001/admin/user/${email}`).then((response) => {
+			dispatch({ type: GET_USER_TO_EDIT, payload: response.data });
+		});
+	};
+}
+//MERCADO PAGO
+
+export function postCart(data) {
+	return async (dispatch) => {
+		console.log(data);
+
+		try {
+			const res = await axios.post(
+				'http://localhost:3001/mercadopago/createorder',
+				data
+			);
+
+			console.log(res.data);
+
+			dispatch({
+				type: SET_CART,
+				payload: res.data,
+			});
+		} catch (error) {
+			console.log(error);
+		}
+	};
+}
+/////////////////////////////////////////////// ADMINISTRADOR//////////

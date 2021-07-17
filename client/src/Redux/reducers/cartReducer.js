@@ -5,25 +5,23 @@ import {
 	REMOVE_FROM_CART,
 	ADJUST_ITEM_QTY,
 	LOAD_CURRENT_ITEM,
+	SET_CART,
 } from '../actionsName';
 
 const initialState = {
-	cart: [],
+	cart: JSON.parse(localStorage.getItem('cart') || '[]'),
 	currentItem: null,
-	cart: JSON.parse(localStorage.getItem('cart')),
+	link: ''
 };
 
 function cartReducer(state = initialState, action) {
 	switch (action.type) {
 		//carrito
 		case ADD_TO_CART:
-			console.log('desde el reducer', action.payload);
-
 			const inCart = state.cart.find((elem) =>
 				elem.id === action.payload.id ? true : false
 			);
 
-			localStorage.setItem('cart', JSON.stringify(action.payload));
 			return {
 				...state,
 
@@ -59,6 +57,11 @@ function cartReducer(state = initialState, action) {
 				...state,
 				currentItem: action.payload,
 			};
+		case SET_CART:
+			return{
+				...state,
+				link: action.payload
+			}
 		default:
 			return state;
 	}

@@ -9,14 +9,16 @@ import {
 	CLEAN_SUGGESTIONS,
 	HIDE_ALERT,
 	FORGOT_PASSWORD,
+	ERRORTOKEN,
 } from '../actionsName';
 
 const initialState = {
 	token: localStorage.getItem('token'),
 	setError: null,
+	errorToken: null,
 	alert: null,
 	authenticated: false,
-	user: undefined,
+	userData: JSON.parse(localStorage.getItem('userData') || '[]'),
 	products: [],
 	productDetail: {},
 	error: null,
@@ -33,31 +35,31 @@ const productSuggestions = (array, name) => {
 function userReducer(state = initialState, action) {
 	switch (action.type) {
 		case ERROR:
-			console.log('desde reducer', action.payload);
 			return {
 				...state,
 				setError: action.payload,
 			};
 		case FORGOT_PASSWORD: {
-			console.log('desde reducer', action.payload.hola);
-			return{
-			...state,
-			alert: action.payload.hola
-			}
+			return {
+				...state,
+				alert: action.payload.hola,
+			};
 		}
 		case HIDE_ALERT:
 			return {
 				...state,
 				setError: null,
-				alert: null
+				alert: null,
 			};
 		case SUCCESS_LOGIN:
-			localStorage.setItem('token', action.payload);
+	
+			localStorage.setItem('token', action.payload.token);
 			return {
 				...state,
-				token: action.payload,
+				token: action.payload.token,
 				authenticated: true,
-				
+				userData: action.payload.user
+
 			};
 		case AUTH_USER:
 			return {
@@ -67,11 +69,14 @@ function userReducer(state = initialState, action) {
 			};
 		case LOG_OUT:
 			localStorage.removeItem('token');
+			localStorage.removeItem('userData');
 			return {
 				...state,
 				user: null,
 				token: null,
-				authenticated: null,
+				authenticated: false,
+				errorToken: null,
+				userData: null
 			};
 		case FETCH_ERROR:
 			return {
@@ -96,6 +101,11 @@ function userReducer(state = initialState, action) {
 			return {
 				...state,
 				suggestions: action.payload,
+			};
+		case ERRORTOKEN:
+			return {
+				...state,
+				errorToken: action.payload,
 			};
 		default: {
 			return state;

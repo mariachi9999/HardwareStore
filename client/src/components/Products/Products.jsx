@@ -6,20 +6,19 @@ import {
 	selectPage,
 	cleanFilters,
 	addToCart,
-	removeFromCart
+	removeFromCart,
 } from '../../Redux/actions';
 import { Link } from 'react-router-dom';
 import styles from './Products.module.css';
 import PagingBox from '../PagingBox/PagingBox';
 
 function Products() {
+	const dispatch = useDispatch();
 	let allProducts = useSelector((state) => state.product.allProducts);
 
 	let filteredProducts = useSelector(
 		(state) => state.product.filterByCategories
 	);
-
-	console.log(allProducts[0])
 
 	let productsToRender = allProducts;
 
@@ -27,6 +26,7 @@ function Products() {
 		productsToRender = filteredProducts;
 	}
 
+	let stockS = useSelector((state) => state.stock.order);
 	let categoryS = useSelector((state) => state.category.selectedCategory);
 	let brandS = useSelector((state) => state.brands.selectBrand);
 	let priceS = useSelector((state) => state.price.order);
@@ -39,6 +39,7 @@ function Products() {
 		price: priceS,
 		page: actualPage,
 		qty: productsPerPage,
+		stock: stockS
 	});
 
 	useEffect(() => {
@@ -48,9 +49,10 @@ function Products() {
 			price: priceS,
 			page: actualPage,
 			qty: productsPerPage,
+			stock: stockS
 		});
 		return () => {
-			console.log('unmount');
+	
 			dispatch(cleanFilters());
 		};
 	}, []);
@@ -86,6 +88,13 @@ function Products() {
 	useEffect(() => {
 		setQuery({
 			...query,
+			stock: stockS,
+		});
+	}, [stockS]);
+
+	useEffect(() => {
+		setQuery({
+			...query,
 			page: actualPage,
 		});
 	}, [actualPage]);
@@ -94,7 +103,9 @@ function Products() {
 		dispatch(getFilteredProducts(query));
 	}, [query]);
 
-	const dispatch = useDispatch();
+	
+
+
 
 	var formatNumber = {
 		separator: '.',
@@ -116,7 +127,6 @@ function Products() {
 			return this.formatear(num);
 		},
 	};
-
 	return (
 		<div className={styles.cardsContainer}>
 			{productsToRender
@@ -139,22 +149,30 @@ function Products() {
 								<div className={styles.data}>
 									<span className={styles.productName}>{p.name}</span>
 								</div>
-								<div className={styles.footerCard}>
+								{/* <div className={styles.footerCard}> */}
+								<div class='d-flex justify-content-center'>
 									<div className={styles.productPrice}>
 										<span>{formatPrice}</span>
 									</div>
 
 									<div className={styles.buttonBuy}>
+										{p.stock>0?
 										<button
 											type='submit'
 											onClick={() => dispatch(addToCart(p))}
 										>
 											Add to Cart
 										</button>
-										
+										:
+										<button
+										type='submit'
+									>
+										Sin Stock
+									</button>
+										}
 									</div>
 								</div>
-
+								{/* </div> */}
 								<div id={styles.paginado}></div>
 							</div>
 						);
@@ -164,5 +182,6 @@ function Products() {
 		</div>
 	);
 }
+
 
 export default Products;
