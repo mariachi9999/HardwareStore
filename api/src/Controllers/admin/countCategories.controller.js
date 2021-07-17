@@ -1,5 +1,5 @@
 const { Product, Category } = require('../../db');
-//http://localhost:3001/admin/categoriescount
+//https://ecommerceherni.herokuapp.com/admin/categoriescount
 
 const countCategories = async (req, res, next) => {
 	const categories = await Category.findAll().then((response) => {

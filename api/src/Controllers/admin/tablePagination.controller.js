@@ -10,7 +10,7 @@ const tablePagination = async (req, res, next) => {
 	if (!Number.isNaN(pageAsNumber) && pageAsNumber > 0) page = pageAsNumber;
 
 	/*
-		url: http://localhost:3001/admin/tablepagination?page=0
+		url: https://ecommerceherni.herokuapp.com/admin/tablepagination?page=0
 		send by body:
 		{
 			"sortBy": "name",

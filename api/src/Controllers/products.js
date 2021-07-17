@@ -199,7 +199,7 @@ const getAllCategories = async function getAllCategories(req, res, next) {
 	}
 };
 
-// http://localhost:3001/products/catalog?category=pc&brand=asus&order=descending&page=1
+// https://ecommerceherni.herokuapp.com/products/catalog?category=pc&brand=asus&order=descending&page=1
 const getFilteredProducts = async function getFilteredProducts(req, res, next) {
 
 	//req.query = { category: 'pc', brand: 'asus', price: 'descending', page: '1' }
