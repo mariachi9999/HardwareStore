@@ -7,6 +7,8 @@ import style from './SubTotal.module.css'
 function SubTotal({qty, userLogged}) {
     const cartProducts = useSelector((state) => state.cart.cart);
     
+    const user = useSelector((state) => state.user.authenticated);
+    
     // const [subtotal, setSubtotal] = useState({
     //     newSubtotal: subtotal * qty
     // })
@@ -16,7 +18,7 @@ function SubTotal({qty, userLogged}) {
             <div className={style.subtotalContainerMain}>
                 <h1>Subtotal:</h1>
                 <h1>0</h1>
-                {userLogged ? 
+                {user ? 
                     <NavLink to='/payment'>
                     <button className={style.paymentButton}>GO TO PAY</button>
                     </NavLink> 
