@@ -9,14 +9,14 @@ function AuthenticationButton() {
 
     const dispatch = useDispatch()
 
-    const handleOnClick=()=>{
-        console.log('click')
-        dispatch(setAuthentication())
-    }
+    // const handleOnClick=()=>{
+    //     console.log('click')
+    //     dispatch(setAuthentication())
+    // }
     
     return (
         <div>
-            <button onClick={handleOnClick}>
+            <button onClick={() => dispatch(setAuthentication(true))}>
                 Authenticated
             </button>
         </div>

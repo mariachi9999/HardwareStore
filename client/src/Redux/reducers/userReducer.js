@@ -112,7 +112,7 @@ function userReducer(state = initialState, action) {
 			console.log('en reducer')
 			return {
 				...state,
-				authenticated: true,
+				authenticated: action.payload,
 			};
 
 		default: {
