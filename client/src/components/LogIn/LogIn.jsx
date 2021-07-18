@@ -54,6 +54,7 @@ const LogIn = () => {
 
 	const responseGoogle = (response) => {
 		console.log('responseGoogle')
+		console.log(response)
 		if (response.tokenId) {
 			setUserInfo({
 				email: response.profileObj.email,
