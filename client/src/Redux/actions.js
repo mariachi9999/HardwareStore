@@ -501,10 +501,11 @@ export function postCart(data) {
 }
 /////////////////////////////////////////////// ADMINISTRADOR//////////
 
-export function setAuthentication() {
+export function setAuthentication(payload) {
 	return async (dispatch) => {
 		dispatch({
 			type: SET_MANUAL_AUTHENTICATION,
+			payload
 		});
 	};
 }
