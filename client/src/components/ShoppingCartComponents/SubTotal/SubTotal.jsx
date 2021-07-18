@@ -54,11 +54,11 @@ console.log(user.userId)
 
 
 	let bodyObject = {
-		userId: user.userId,
+		// userId: user.userId,
 		prodCarrito: array,
 		ammount: totalPrice,
 		status: status,
-		userId: userId
+		userId: 1
 	};
 
 	let totalFormat = formatNumber.new(totalPrice, '$');
