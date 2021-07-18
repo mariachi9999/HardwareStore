@@ -162,7 +162,7 @@ const LogIn = () => {
 								Sign in
 							</button>
 						</div>
-						{/* <GoogleLogin
+						<GoogleLogin
 							clientId={googleApiKey}
 							render={(renderProps) => (
 								<button
@@ -176,7 +176,7 @@ const LogIn = () => {
 							onSuccess={responseGoogle}
 							onFailure={responseGoogle}
 							cookiePolicy={'single_host_origin'}
-						/> */}
+						/>
 					</form>
 					<div class=' d-flex justify-content-center '>
 						<Link
