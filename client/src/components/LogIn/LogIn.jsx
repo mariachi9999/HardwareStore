@@ -13,7 +13,7 @@ import Div from '../StyledComponents/Validation';
 /* global google */
 /* global gapi */
 import { GoogleLogin } from 'react-google-login';
-import {AuthenticationButton} from '../AuthenticationButton'
+import AuthenticationButton from '../AuthenticationButton/AuthenticationButton'
 
 const GlobalStyle = createGlobalStyle`
 
