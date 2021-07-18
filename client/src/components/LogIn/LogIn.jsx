@@ -76,6 +76,10 @@ const LogIn = () => {
 		}
 	});
 
+	useEffect(() => {
+		console.log(userInfo)
+	}, [userInfo]);
+
 
 
 	const dispatch = useDispatch();
