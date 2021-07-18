@@ -11,7 +11,7 @@ function AuthenticationButton() {
 
     const handleOnClick=()=>{
         console.log('click')
-        dispatch(setAuthentication)
+        dispatch(setAuthentication())
     }
     
     return (
