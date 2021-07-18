@@ -1,7 +1,7 @@
 const { Product, Category } = require('../../db');
 // to make it work uncomment the pagination line in routes index
 // implemantation details on ../../routes/pagination
-// http://localhost:3001/pagination?page=2&category=tabletas&order=ASC
+// https://ecommerceherni.herokuapp.com/pagination?page=2&category=tabletas&order=ASC
 
 const pagination = async (req, res, next) => {
 	const LIMIT = 3;
