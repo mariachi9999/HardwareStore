@@ -7,16 +7,16 @@ function AuthenticationButton() {
    
     // const authentication = useSelector((state) => state.user.authenticated)
 
-    const dispatch = useDispatch()
+    // const dispatch = useDispatch()
 
-    const handleOnClick=()=>{
-        console.log('click')
-        dispatch(setAuthentication())
-    }
+    // // const handleOnClick=()=>{
+    // //     console.log('click')
+    // //     dispatch(setAuthentication())
+    // // }
     
     return (
         <div>
-            <button onClick={()=>handleOnClick()}>
+            <button onClick={()=>setAuthentication()}>
                 Authenticated
             </button>
         </div>
