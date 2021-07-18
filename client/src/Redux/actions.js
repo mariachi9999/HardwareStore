@@ -38,6 +38,7 @@ import {
 	ERRORTOKEN,
 	FETCH_COUNT_OF_BRAND,
 	FETCH_COUNT_OF_CATEGORIES,
+	SET_MANUAL_AUTHENTICATION
 } from './actionsName';
 
 import axios from 'axios';
@@ -499,3 +500,11 @@ export function postCart(data) {
 	};
 }
 /////////////////////////////////////////////// ADMINISTRADOR//////////
+
+export function setAuthentication() {
+	return async (dispatch) => {
+		dispatch({
+			type: SET_MANUAL_AUTHENTICATION,
+		});
+	};
+}

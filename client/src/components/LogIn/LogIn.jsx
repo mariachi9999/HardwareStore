@@ -13,6 +13,7 @@ import Div from '../StyledComponents/Validation';
 /* global google */
 /* global gapi */
 import { GoogleLogin } from 'react-google-login';
+import {AuthenticationButton} from '../AuthenticationButton/AuthenticationButton'
 
 const GlobalStyle = createGlobalStyle`
 
@@ -191,6 +192,7 @@ const LogIn = () => {
 							Forgot your password?
 						</Link>
 					</div>
+					<AuthenticationButton/>
 				</div>
 				<div class=' rounded'>
 					<Link to={'/'}>

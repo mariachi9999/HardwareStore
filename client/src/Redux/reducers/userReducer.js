@@ -10,6 +10,7 @@ import {
 	HIDE_ALERT,
 	FORGOT_PASSWORD,
 	ERRORTOKEN,
+	SET_MANUAL_AUTHENTICATION
 } from '../actionsName';
 
 const initialState = {
@@ -107,9 +108,16 @@ function userReducer(state = initialState, action) {
 				...state,
 				errorToken: action.payload,
 			};
+		case SET_MANUAL_AUTHENTICATION:
+			return {
+				...state,
+				authenticated: true,
+			};
+
 		default: {
 			return state;
 		}
 	}
 }
 export default userReducer;
+
