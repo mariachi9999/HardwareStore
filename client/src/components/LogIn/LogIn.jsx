@@ -71,7 +71,7 @@ const LogIn = () => {
 	useEffect(() => {
 		if (isSignedIn) {
 			console.log('dispatch loginGmail')
-
+			console.log(userInfo)
 			dispatch(loginGmail(userInfo));
 		}
 	});
