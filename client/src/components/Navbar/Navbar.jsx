@@ -23,25 +23,25 @@ const Navbar = () => {
 	const dispatch = useDispatch();
 	const history = useHistory();
 	const token = useSelector((state) => state.user.token);
-
+	const userData = useSelector((state) => state.user.userData)
 	const userName = useSelector((state) => state.user.userData);
-	
-		
-		const errorToken = useSelector((state) => state.user.errorToken);
-		console.log(errorToken);
-		useEffect(() => {
-			if (errorToken) {
-				Swal.fire({
-					icon: 'error',
-					title: 'Oops...',
-					text: 'Your session has expired, please login again',
-				});
-				dispatch(logOut());
-			}
-		}, [errorToken]);
 
 
-	
+	const errorToken = useSelector((state) => state.user.errorToken);
+	console.log(errorToken);
+	useEffect(() => {
+		if (errorToken) {
+			Swal.fire({
+				icon: 'error',
+				title: 'Oops...',
+				text: 'Your session has expired, please login again',
+			});
+			dispatch(logOut());
+		}
+	}, [errorToken]);
+
+
+
 
 	//CARRITO
 	const [cartCount, SetCartCount] = useState(0);
@@ -65,7 +65,7 @@ const Navbar = () => {
 
 	useEffect(() => {
 		axios
-			.get('https://ecommerceherni.herokuapp.com/products')
+			.get('http://localhost:3001/products')
 			.then((res) => {
 				const suggestions = res.data.map(({ name }) => name);
 				setOptions(suggestions);
@@ -104,8 +104,8 @@ const Navbar = () => {
 			setSearch('');
 		}
 	};
-
 	<button onclick='myFunction()'>Click me</button>;
+	console.log(userData)
 	return (
 		<>
 			<div className={styles.navbarEcommerce}>
@@ -123,7 +123,7 @@ const Navbar = () => {
 							className={`${styles.flexContainerEcommerce} ${styles.flexColumnEcommerce} ${styles.posRelEcommerce}`}
 							ref={wrapperRef}
 						>
-					
+
 							<input
 								className={styles.inputEcommerce}
 								value={search}
@@ -163,24 +163,33 @@ const Navbar = () => {
 					</div>
 				</div>
 				<div className={styles.linksNavEcommerce}>
+					{userData && userData.admin!== true ? (
+						<Link to='/myaccount'> My Account </Link>
+					) : null }
+					{userData && userData.admin === true ? (
+					<div>
+						<Link to='/admin'>Admin Panel</Link>
+					</div>
+					) : null
+					}
 					{token ? (
 						<div class='d-block mt-4'>
-						<button
-							type='submit'
-							className={styles.but}
-							onClick={() => {
-								dispatch(logOut());
-							}}
-						>
-							Log Out
-						</button>
-						{Array.isArray(userName) ? <p class='text-white h6' >Hola {userName.email}!</p>
-						
-					:
-					<p class='text-white h6' >Hola {userName.name}!</p>
-				
-					}
-					
+							<button
+								type='submit'
+								className={styles.but}
+								onClick={() => {
+									dispatch(logOut());
+								}}
+							>
+								Log Out
+							</button>
+							{Array.isArray(userName) ? <p class='text-white h6' >Hi, {userName.email}!</p>
+
+								:
+								<p class='text-white h6' >Hi, {userName.name}!</p>
+
+							}
+
 						</div>
 					) : (
 						<>
@@ -202,7 +211,7 @@ const Navbar = () => {
 				<div className={styles.sections}>
 					<Link to='/'>Home</Link>
 					<Link to='/catalog'>Catalog</Link>
-					
+
 				</div>
 			</div>
 		</>

@@ -1,10 +1,12 @@
 const { Sequelize } = require('sequelize');
 const mercadopago = require('mercadopago');
-const { Order, OrderDetail, Product } = require('../db');
+const { Order, OrderDetail, Product, User } = require('../db');
 
 //---------------ACA CREAMOS LA ORDEN------------------
 const createOrder = async function createOrder(req, res) {
-	const { ammount, status, prodCarrito } = req.body;
+	const { ammount, status, prodCarrito, userId } = req.body;
+
+	console.log('userIddd', userId);
 
 	try {
 		var newOrder = await Order.create(
@@ -34,13 +36,25 @@ const createOrder = async function createOrder(req, res) {
 						});
 
 						if (productFind) {
+							// OrderDetail.belongsTo(Product);
 							await newDetail.setProduct(productFind.dataValues.id);
 						}
 						await order.addOrderDetail(newDetail.dataValues.id);
+
+						var userFind = await User.findOne({
+							where: { userId: userId },
+						});
+						console.log('USER ID', userFind.dataValues.userId);
+						if (userFind) {
+							// // Order.belongsTo(User, { foreignKey: 'userId' });
+							await order.setUser(userFind.dataValues.userId);
+						}
 					})();
 				});
 		});
-		// res.status(200).json('Order created successfully!');
+
+
+		// res.status(200).json('Order created successfully!', productFind);
 
 		//--------------ACA SE CREA LA PREFERENCIA PARA MANDAR A MERCADO PAGO-----------------
 		// [
@@ -60,11 +74,11 @@ const createOrder = async function createOrder(req, res) {
 
 			back_urls: {
 				success: 'http://localhost:3000/shoppingcart/success',
-				failure: 'https://ecommerceherni.herokuapp.com/mercadopago/pagos',
-				pending: 'https://ecommerceherni.herokuapp.com/mercadopago/pagos',
+				failure: 'http://localhost:3001/mercadopago/pagos',
+				pending: 'http://localhost:3001/mercadopago/pagos',
 			},
 
-			"auto_return": "approved",
+			auto_return: 'approved',
 		};
 
 		mercadopago.preferences

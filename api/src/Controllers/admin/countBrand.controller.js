@@ -1,6 +1,7 @@
+const { Op } = require('sequelize');
 const { Brand, Product } = require('../../db');
 
-// https://ecommerceherni.herokuapp.com/admin/countofbrand
+// http://localhost:3001/admin/countofbrand
 
 const countBrand = async (req, res, next) => {
 	const brands = await Brand.findAll({ attributes: ['name'] }).then(
@@ -13,6 +14,15 @@ const countBrand = async (req, res, next) => {
 		include: {
 			model: Brand,
 		},
+		where: {
+			brandId: {
+				[Op.not]: null,
+			},
+		},
+	});
+
+	const productsWithoutBrand = await Product.findAll({
+		where: { brandId: { [Op.is]: null } },
 	});
 
 	const counter = (array, brand) => {
@@ -21,13 +31,23 @@ const countBrand = async (req, res, next) => {
 
 	const count = [];
 	let Others = 0;
-	for (const brand of brands) {
-		const n = counter(productsWithBrand, brand);
-		if (n !== 1) count.push({ [brand]: n });
-		else Others++;
+	let n = 0;
+	for (const name of brands) {
+		if (name !== null) {
+			n = counter(productsWithBrand, name);
+			if (n !== 1) count.push({ [name]: n });
+			else Others++;
+		}
 	}
-	count.push({ Others });
-	return res.json(count);
+	if (Others) count.push({ Others });
+	if (productsWithoutBrand.length)
+		count.push({ ['No Brand']: productsWithoutBrand.length });
+
+	const countOrdered = count.sort(
+		(a, b) => Object.values(a) - Object.values(b)
+	);
+
+	return res.json(countOrdered);
 };
 
 module.exports = countBrand;

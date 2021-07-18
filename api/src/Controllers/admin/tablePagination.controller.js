@@ -3,14 +3,15 @@ const { Product, Category, Brand } = require('../../db.js');
 
 const tablePagination = async (req, res, next) => {
 	let products = {};
-	const { category, sortBy, order, limit, search, brand } = req.body;
+	const { deleteProduct, category, sortBy, order, limit, search, brand } =
+		req.body;
 	const pageAsNumber = Number.parseInt(req.query.page);
 
 	let page = 0;
 	if (!Number.isNaN(pageAsNumber) && pageAsNumber > 0) page = pageAsNumber;
 
 	/*
-		url: https://ecommerceherni.herokuapp.com/admin/tablepagination?page=0
+		url: http://localhost:3001/admin/tablepagination?page=0
 		send by body:
 		{
 			"sortBy": "name",
@@ -18,9 +19,13 @@ const tablePagination = async (req, res, next) => {
 			"category": "default",
 			"limit": paginationNumber,
 			"brand": "default",
-			"search": ""
+			"search": "",
+			"deleteProduct": 0
 		}
 	*/
+	if (deleteProduct && Number.parseInt(deleteProduct) !== 0) {
+		await Product.destroy({ where: { id: deleteProduct } });
+	}
 
 	if (brand && brand !== 'default') {
 		if (order && order !== 'default' && search && search.trim().length) {
@@ -121,7 +126,7 @@ const tablePagination = async (req, res, next) => {
 			include: [Category, Brand],
 			where: {
 				name: {
-					[Op.iLike]: `%${search}%`,
+					[Op.iLike]: `%${search.toLowerCase()}%`,
 				},
 			},
 			order: [[sortBy, order]],
