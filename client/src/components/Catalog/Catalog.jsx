@@ -6,6 +6,9 @@ import { useEffect } from 'react'
 import { getCategories, getBrands,getProducts } from '../../Redux/actions'
 import styles from './Catalog.module.css'
 
+import AuthenticationButton from '../AuthenticationButton/AuthenticationButton'
+
+
 
 function Catalog() {
 
@@ -30,6 +33,7 @@ function Catalog() {
         
                 <FilterCategories id={styles.filterContainer}/> 
                  <Products id={styles.productsContainer}/> 
+                 <AuthenticationButton/>
         
        </div> 
 
