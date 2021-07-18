@@ -109,6 +109,7 @@ function userReducer(state = initialState, action) {
 				errorToken: action.payload,
 			};
 		case SET_MANUAL_AUTHENTICATION:
+			console.log('en reducer')
 			return {
 				...state,
 				authenticated: true,

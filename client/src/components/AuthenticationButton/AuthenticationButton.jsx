@@ -10,6 +10,7 @@ function AuthenticationButton() {
     const dispatch = useDispatch()
 
     const handleOnClick=()=>{
+        console.log('click')
         dispatch(setAuthentication)
     }
     
