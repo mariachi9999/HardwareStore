@@ -76,9 +76,9 @@ const LogIn = () => {
 		}
 	});
 
-	useEffect(() => {
-		console.log(userInfo)
-	}, [userInfo]);
+	// useEffect(() => {
+	// 	console.log(userInfo)
+	// }, [userInfo]);
 
 
 
