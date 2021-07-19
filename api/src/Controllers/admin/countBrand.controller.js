@@ -1,7 +1,7 @@
 const { Op } = require('sequelize');
 const { Brand, Product } = require('../../db');
 
-// https://ecommerceherni.herokuapp.com/admin/countofbrand
+// http://localhost:3001/admin/countofbrand
 
 const countBrand = async (req, res, next) => {
 	const brands = await Brand.findAll({ attributes: ['name'] }).then(

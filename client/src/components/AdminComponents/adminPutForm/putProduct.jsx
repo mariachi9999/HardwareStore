@@ -89,7 +89,7 @@ function PutProduct(props) {
 
     const onSubmit = async ()=>{
 			try {
-				await axios.put('https://ecommerceherni.herokuapp.com/admin/putproduct',product)
+				await axios.put('http://localhost:3001/admin/putproduct',product)
                 .then(()=>{
                     Swal.fire({
                         position: 'center',

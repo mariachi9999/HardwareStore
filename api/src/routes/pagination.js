@@ -12,7 +12,7 @@ const router = Router();
   Valor inicial de "order" deberia ser "default" otros valores["default", "ASC", "DESC"]
 
   URL
-  https://ecommerceherni.herokuapp.com/pagination?page=2&category=tabletas&order=ASC
+  http://localhost:3001/pagination?page=2&category=tabletas&order=ASC
 
   VALOR DEVUELTO
   "pagination" devuelve un objeto con el "total de paginas" y los "productos".

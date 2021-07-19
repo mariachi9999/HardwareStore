@@ -25,21 +25,19 @@ const Navbar = () => {
 	const token = useSelector((state) => state.user.token);
 	const userData = useSelector((state) => state.user.userData)
 	const userName = useSelector((state) => state.user.userData);
-
-
-	const errorToken = useSelector((state) => state.user.errorToken);
-	console.log(errorToken);
-	useEffect(() => {
-		if (errorToken) {
-			Swal.fire({
-				icon: 'error',
-				title: 'Oops...',
-				text: 'Your session has expired, please login again',
-			});
-			dispatch(logOut());
-		}
-	}, [errorToken]);
-
+		
+		const errorToken = useSelector((state) => state.user.errorToken);
+		
+		useEffect(() => {
+			if (errorToken) {
+				Swal.fire({
+					icon: 'error',
+					title: 'Oops...',
+					text: 'Your session has expired, please login again',
+				});
+				dispatch(logOut());
+			}
+		}, [errorToken]);
 
 
 
@@ -65,7 +63,7 @@ const Navbar = () => {
 
 	useEffect(() => {
 		axios
-			.get('https://ecommerceherni.herokuapp.com/products')
+			.get('http://localhost:3001/products')
 			.then((res) => {
 				const suggestions = res.data.map(({ name }) => name);
 				setOptions(suggestions);
@@ -163,7 +161,7 @@ const Navbar = () => {
 					</div>
 				</div>
 				<div className={styles.linksNavEcommerce}>
-					{userData && userData.admin!== true ? (
+					{userData === true && userData.admin!== true ? (
 						<Link to='/myaccount'> My Account </Link>
 					) : null }
 					{userData && userData.admin === true ? (

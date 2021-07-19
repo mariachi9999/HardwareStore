@@ -191,9 +191,9 @@ const LogIn = () => {
 						>
 							Forgot your password?
 						</Link>
-					</div>
+					{/* </div>
 					<AuthenticationButton/>
-				</div>
+				</div> */}
 				<div class=' rounded'>
 					<Link to={'/'}>
 						<div class=''>
