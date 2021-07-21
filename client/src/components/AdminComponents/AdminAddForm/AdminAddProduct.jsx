@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import React, { useEffect, useState } from 'react';
 import { createdProduct, getProducts, getCategories, getBrands } from "../../../Redux/actions"
 import { useForm } from 'react-hook-form';
-import swal from 'sweetalert';
+import swal from 'sweetalert2';
 import { Link } from 'react-router-dom';
 import styles from './stylesForms.module.css'
 import { MdArrowBack } from 'react-icons/md'

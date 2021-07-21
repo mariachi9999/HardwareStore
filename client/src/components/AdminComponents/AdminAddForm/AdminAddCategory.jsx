@@ -2,7 +2,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import React, { useEffect, useState } from 'react';
 import {createdCategory, getCategories} from "../../../Redux/actions"
 import { useForm } from 'react-hook-form';
-import swal from 'sweetalert';
+import swal from 'sweetalert2';
 import styles from '../../Register/Register.module.css'
 import { MdArrowBack } from 'react-icons/md'
 import { Link } from 'react-router-dom';
