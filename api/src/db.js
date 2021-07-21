@@ -6,31 +6,32 @@ const { DB_USER, DB_PASSWORD, DB_HOST, DB_NAME } = process.env;
 
 //esto lo necesita postgres en deploy
 let sequelize =
-  process.env.NODE_ENV === "production"
-    ? new Sequelize({
-        database: DB_NAME,
-        dialect: "postgres",
-        host: DB_HOST,
-        port: 5432,
-        username: DB_USER,
-        password: DB_PASSWORD,
-        pool: {
-          max: 3,
-          min: 1,
-          idle: 10000,
-        },
-        dialectOptions: {
-          ssl: {
-            require: true,
-            rejectUnauthorized: false,
-          },
-          keepAlive: true,
-        },
-        ssl: true,
-      }) : new Sequelize(
-          `postgres://${DB_USER}:${DB_PASSWORD}@${DB_HOST}/${DB_NAME}`,
-          { logging: false, native: false }
-        );
+	process.env.NODE_ENV === 'production'
+		? new Sequelize({
+				database: DB_NAME,
+				dialect: 'postgres',
+				host: DB_HOST,
+				port: 5432,
+				username: DB_USER,
+				password: DB_PASSWORD,
+				pool: {
+					max: 3,
+					min: 1,
+					idle: 10000,
+				},
+				dialectOptions: {
+					ssl: {
+						require: true,
+						rejectUnauthorized: false,
+					},
+					keepAlive: true,
+				},
+				ssl: true,
+		  })
+		: new Sequelize(
+				`postgres://${DB_USER}:${DB_PASSWORD}@${DB_HOST}/${DB_NAME}`,
+				{ logging: false, native: false }
+		  );
 
 const basename = path.basename(__filename);
 
@@ -54,13 +55,33 @@ let capsEntries = entries.map((entry) => [
 ]);
 sequelize.models = Object.fromEntries(capsEntries);
 
-const { Product, Role, User, Category, Brand, Order } = sequelize.models;
+const { Product, Role, User, Category, Brand, Order, OrderDetail, Cart } =
+	sequelize.models;
 
 Role.hasMany(User, { foreignKey: 'roleId' });
 User.belongsTo(Role, { foreignKey: 'roleId' });
 
 User.hasMany(Order, { foreignKey: 'userId' });
 Order.belongsTo(User, { foreignKey: 'userId' });
+
+Order.hasMany(OrderDetail, {
+	foreignKey: 'orderId',
+});
+Product.hasMany(OrderDetail, {
+	foreignKey: 'productId',
+});
+OrderDetail.belongsTo(Product);
+
+User.hasMany(Cart, {
+	foreignKey: 'userId',
+});
+Product.hasMany(Cart, {
+	foreignKey: 'productId',
+});
+Cart.belongsTo(Product);
+Cart.belongsTo(User, {
+	foreignKey: 'userId',
+});
 
 Product.belongsToMany(Category, {
 	through: 'category_product',
