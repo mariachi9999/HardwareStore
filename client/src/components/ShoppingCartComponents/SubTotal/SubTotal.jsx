@@ -2,14 +2,13 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useEffect, useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import style from './SubTotal.module.css';
-import { postCart } from '../../../Redux/actions';
+import { postCart, postCartCrypto } from '../../../Redux/actions';
 import { formatNumber } from '../../../helper/priceFormater';
 
-function SubTotal({ qty, userLogged,}) {
+function SubTotal() {
 	const cartProducts = useSelector((state) => state.cart.cart);
 	const [totalPrice, setTotalPrice] = useState(0);
 	const [totalItems, setTotalItems] = useState(0);
-
 
 	const dispatch = useDispatch();
 	const mercadoPago = useSelector((state) => state.cart.link);
@@ -17,7 +16,6 @@ function SubTotal({ qty, userLogged,}) {
 	const token = useSelector((state) => state.user.token);
 
 	const user = useSelector((state) => state.user.userData);
-console.log(user.userId)
 
 	if (mercadoPago !== '') {
 		window.location.href = mercadoPago;
@@ -35,12 +33,11 @@ console.log(user.userId)
 
 		setTotalItems(items);
 		setTotalPrice(price);
-
 	}, [cartProducts, totalPrice, totalItems, setTotalPrice, setTotalItems]);
 
 	let status = 'created';
 	let array = [];
-	
+
 	for (let i = 0; i < cartProducts.length; i++) {
 		const element = {
 			prodId: cartProducts[i].id,
@@ -52,17 +49,20 @@ console.log(user.userId)
 		array.push(element);
 	}
 
-	let bodyObject
-if( user != null){
-	 bodyObject = {
-		id: user.userId,
-		prodCarrito: array,
-		ammount: totalPrice,
-		status: status,
-	};
-}
-console.log(bodyObject)
+	let bodyObject;
+	if (user != null) {
+		bodyObject = {
+			id: user.userId,
+			prodCarrito: array,
+			ammount: totalPrice,
+			status: status,
+		};
+	}
 	let totalFormat = formatNumber.new(totalPrice, '$');
+
+	const handleClickCrypto = () => {
+		dispatch(postCartCrypto(bodyObject))
+	};
 
 	return (
 		<div>
@@ -78,15 +78,24 @@ console.log(bodyObject)
 					</p>
 					<h3>{totalFormat}</h3>
 				</div>
-		
+
 				{token ? (
-	
-							<button
+					<div>
+						<button
 							className={style.paymentButton}
 							onClick={() => dispatch(postCart(bodyObject))}
 						>
-							Checkout
+							Checkout with Mercado Pago
 						</button>
+						<NavLink to='/catalog'>
+							<input
+								type='image'
+								src='https://www.coinpayments.net/images/pub/checkout-blue.png'
+								alt='Checkout'
+								onClick={handleClickCrypto}
+							/>
+						</NavLink>
+					</div>
 				) : (
 					<NavLink to='/login'>
 						<button className={style.paymentButton}>Checkout</button>

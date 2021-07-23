@@ -40,18 +40,35 @@ import {
 	FETCH_COUNT_OF_BRAND,
 	GET_USER_ORDERS,
 	FETCH_COUNT_OF_CATEGORIES,
-
 	GET_PAY,
-
-	SET_MANUAL_AUTHENTICATION
-
+	SET_MANUAL_AUTHENTICATION,
+	CREATE_CART_USER,
+	PRODUCT_WITH_ORDER,
+	USER_WITH_ORDER,
+	TABLE_ORDER_PAGINATION_SIZE,
+	TABLE_USER_ORDER_PAGINATION_SIZE,
+	FILTER_BY_ORDER_STATUS,
 } from './actionsName';
 
 import axios from 'axios';
-import { bindActionCreators } from 'redux';
 
 export const changePaginationSize = (payload) => ({
 	type: SIZE_PAGINATION,
+	payload,
+});
+
+export const filterByStatus = (payload) => ({
+	type: FILTER_BY_ORDER_STATUS,
+	payload,
+});
+
+export const changeTableOrderPaginationSize = (payload) => ({
+	type: TABLE_ORDER_PAGINATION_SIZE,
+	payload,
+});
+
+export const changeTableOrderUserPaginationSize = (payload) => ({
+	type: TABLE_USER_ORDER_PAGINATION_SIZE,
 	payload,
 });
 
@@ -94,6 +111,11 @@ export const fetchSuggestions = (payload) => ({
 	payload,
 });
 
+export const fetchProductWithOrder = (payload) => ({
+	type: PRODUCT_WITH_ORDER,
+	payload,
+});
+
 export const fetchListProducts = (payload) => ({
 	type: LIST_PRODUCT_ON_TABLE,
 	payload,
@@ -106,6 +128,11 @@ export const fetchCountOfBrand = (payload) => ({
 
 export const fetchCountOfCategories = (payload) => ({
 	type: FETCH_COUNT_OF_CATEGORIES,
+	payload,
+});
+
+export const fetchUserWithOrders = (payload) => ({
+	type: USER_WITH_ORDER,
 	payload,
 });
 
@@ -123,6 +150,37 @@ export function getListOfProductTable(page, object) {
 				object
 			);
 			dispatch(fetchListProducts(res.data));
+		} catch (error) {
+			dispatch(fetchError(error));
+		}
+	};
+}
+
+// https://ecommerceherni.herokuapp.com/admin/usersandhisorders?page=0 (post);
+export function getUserWithOrdersDetail(page, object) {
+	return async (dispatch) => {
+		try {
+			dispatch(fetchPending());
+			const res = await axios.post(
+				`https://ecommerceherni.herokuapp.com/admin/usersandhisorders?page=${page}`,
+				object
+			);
+			dispatch(fetchUserWithOrders(res.data));
+		} catch (error) {
+			dispatch(fetchError(error));
+		}
+	};
+}
+
+export function getProductWithOrderData(page, object) {
+	return async (dispatch) => {
+		try {
+			dispatch(fetchPending());
+			const res = await axios.post(
+				`https://ecommerceherni.herokuapp.com/admin/listorders?page=${page}`,
+				object
+			);
+			dispatch(fetchProductWithOrder(res.data));
 		} catch (error) {
 			dispatch(fetchError(error));
 		}
@@ -219,7 +277,7 @@ export function logIn(dato) {
 				payload: res.data,
 			});
 		} catch (error) {
-			console.log(error.response)
+			console.log(error.response);
 			dispatch({
 				type: ERROR,
 				payload: error.response.data.msg,
@@ -264,7 +322,7 @@ export function authUser(data) {
 				});
 			}
 		} catch (error) {
-		console.log(error)
+			console.log(error);
 		}
 	};
 }
@@ -487,7 +545,7 @@ export function createdProduct(elem) {
 export function deleProduct(id) {
 	return async () => {
 		try {
-	  	await axios.delete(`https://ecommerceherni.herokuapp.com/admin/deleteproduct/${id}`);
+			await axios.delete(`https://ecommerceherni.herokuapp.com/admin/deleteproduct/${id}`);
 		} catch (error) {
 			console.log(error);
 		}
@@ -497,7 +555,7 @@ export function deleProduct(id) {
 export function deleBrand(id) {
 	return async () => {
 		try {
-	  	await axios.delete(`https://ecommerceherni.herokuapp.com/admin/deletebrand/${id}`);
+			await axios.delete(`https://ecommerceherni.herokuapp.com/admin/deletebrand/${id}`);
 		} catch (error) {
 			console.log(error);
 		}
@@ -507,16 +565,12 @@ export function deleBrand(id) {
 export function deleCategory(id) {
 	return async () => {
 		try {
-	  	await axios.delete(`https://ecommerceherni.herokuapp.com/admin/deletecategory/${id}`);
+			await axios.delete(`https://ecommerceherni.herokuapp.com/admin/deletecategory/${id}`);
 		} catch (error) {
 			console.log(error);
 		}
 	};
 }
-
-
-
-
 
 export function getUsers() {
 	return async (dispatch) => {
@@ -557,7 +611,6 @@ export function postCart(data) {
 	};
 }
 
-
 export function getPayInfo(data) {
 	return async (dispatch) => {
 		console.log(data);
@@ -576,12 +629,9 @@ export function getPayInfo(data) {
 	};
 }
 
-
-
 ////////////////////// USER ACCOUNT ACTIONS  ////////////////////
 
 export function getUserOrders(userId) {
-	console.log('desde reducer', userId);
 	return async (dispatch) => {
 		axios
 			.get(`https://ecommerceherni.herokuapp.com/orders/order/user/${userId}`)
@@ -591,13 +641,71 @@ export function getUserOrders(userId) {
 	};
 }
 
+export function postCartUser(data) {
+	console.log(data);
+	return async (dispatch) => {
+		try {
+			const res = axios.post('https://ecommerceherni.herokuapp.com/shoppingcart', data);
+			console.log(res);
+		} catch (error) {
+			console.log(error.response);
+		}
+	};
+}
+
+export function getCartUser(id) {
+	return async (dispatch) => {
+		console.log('iiiiidd', id);
+		try {
+			const res = await axios.post(
+				'https://ecommerceherni.herokuapp.com/shoppingcart/userCart',
+				{ userId: id }
+			);
+			console.log('id', res.data);
+			dispatch({
+				type: CREATE_CART_USER,
+				payload: res.data,
+			});
+		} catch (error) {
+			console.log(error);
+		}
+	};
+}
+
 ////////////////////////// Solo se usa en proyecto deployeado
 export function setAuthentication(payload) {
 	return async (dispatch) => {
 		dispatch({
 			type: SET_MANUAL_AUTHENTICATION,
-			payload
+			payload,
 		});
 	};
 }
 
+/// COINPAYMENTS ACTIONS
+export function postCartCrypto(data) {
+	return async (dispatch) => {
+		console.log(data);
+
+		try {
+			const res = await axios.post(
+				'https://ecommerceherni.herokuapp.com/coinpayment/createorder',
+				data
+			);
+
+			console.log(res.data);
+
+			dispatch({
+				type: SET_CART,
+				payload: res.data,
+			});
+
+			// <a href='https://www.coinpayments.net/index.php?cmd=_pos&reset=1&merchant=606a89bb575311badf510a4a8b79a45e&item_name=Order+Payment&currency=ARS&allow_currency=1&amountf=1000' target='_blank' rel="noopener noreferrer">
+			const url = `https://www.coinpayments.net/index.php?cmd=_pos&reset=1&merchant=606a89bb575311badf510a4a8b79a45e&item_name=Order+Payment&currency=ARS&allow_currency=1&amountf=${res.data.ammount}&item_number=${res.data.userId}&custom=${res.data.orderId}`
+			window.open(url)
+
+		} catch (error) {
+			console.log(error);
+		}
+	};
+}
