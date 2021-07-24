@@ -31,8 +31,9 @@ const getOrderById = async function getOrderById(req, res, next) {
 };
 
 const modifyOrderStatus = async function modifyOrderStatus(req, res, next) {
+	// type: ENUM('created', 'processing', 'cancelled', 'completed'),
 	const id = parseInt(req.params.id);
-	const newStatus = req.body.status;
+	const newStatus = req.body.status.toLowerCase()
 
 	try {
 		const orderById = await Order.findOne({
