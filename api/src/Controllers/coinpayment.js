@@ -150,8 +150,12 @@ const createOrderCrypto = async function createOrderCrypto(req, res) {
 // app.use(bodyParser.urlencoded({ extended: true }));
  
 const ipnUpdate = async (req, res)=>{
-	console.log(req)
-	res.json(req)
+	try {
+		console.log(req.body)
+		res.json(req.body)
+	} catch (error){
+		res.status(400).json(error);
+	}
 }
 
 
