@@ -141,37 +141,7 @@ const createOrderCrypto = async function createOrderCrypto(req, res) {
 
 //////////////////// Coinpayment IPN
 
-// const ipnUpdate = async (req, res)=>{
-// 	try {
-// 		console.log(req.body)
-// 		res.json(req.body)
-// 	} catch (error){
-// 		res.status(400).json(error);
-// 	}
-// }
-
 const ipnUpdate = async (req, res, next) => {
-	// type: ENUM('created', 'processing', 'cancelled', 'completed'),
-
-	// 	Payment Statuses
-	// Payments will post with a 'status' field, here are the currently defined values:
-
-	//     -2 = PayPal Refund or Reversal
-	//     -1 = Cancelled / Timed Out
-	//     0 = Waiting for buyer funds
-	//     1 = We have confirmed coin reception from the buyer
-	//     2 = Queued for nightly payout (if you have the Payout Mode for this coin set to Nightly)
-	//     3 = PayPal Pending (eChecks or other types of holds)
-	//     5 = In Escrow (if you are using SetEscrow)
-	//     100 = Payment Complete. We have sent your coins to your payment address or 3rd party payment system reports the payment complete
-
-	// For future-proofing your IPN handler you can use the following rules:
-
-	//     <0 = Failures/Errors
-	//     0-99 = Payment is Pending in some way
-	//     >=100 = Payment completed successfully
-
-	// IMPORTANT: You should never ship/release your product until the status is >= 100 OR == 2 (Queued for nightly payout)!
 
 	console.log(req.body);
 	const id = parseInt(req.body.custom);
