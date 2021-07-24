@@ -3,9 +3,11 @@ const { response } = require('express');
 const { Sequelize } = require('sequelize');
 const { Order, OrderDetail, Product, User } = require('../db');
 
-
-
-const { COINPAYMENT_API_PUBLIC, COINPAYMENT_API_SECRET, COINPAYMENT_MERCHAND_ID } = process.env;
+const {
+	COINPAYMENT_API_PUBLIC,
+	COINPAYMENT_API_SECRET,
+	COINPAYMENT_MERCHAND_ID,
+} = process.env;
 
 const CoinpaymentsCredentials = {
 	key: '736e355aacd8db0db04f226da8d268fe22b3b87733de4ebec978c9c78893fe75',
@@ -62,28 +64,27 @@ const getTransactionInfo = async (req, res) => {
 const getCoinRates = async (req, res) => {
 	const CoinpaymentsRatesOpts = {
 		short: 1,
-		accepted: 2
+		accepted: 2,
 	};
 	const rates = await client.rates(CoinpaymentsRatesOpts);
-    console.log(rates);
+	console.log(rates);
 	res.json(rates);
 };
 
 //Get POS.
 const createPos = async (req, res) => {
-    const {amount} = req.body
+	const { amount } = req.body;
 
-    const pos = `https://www.coinpayments.net/index.php?cmd=_pos&reset=1&merchant=${COINPAYMENT_MERCHAND_ID}&item_name=Order+Payment&currency=ARS&allow_currency=1&amountf=${amount}`
+	const pos = `https://www.coinpayments.net/index.php?cmd=_pos&reset=1&merchant=${COINPAYMENT_MERCHAND_ID}&item_name=Order+Payment&currency=ARS&allow_currency=1&amountf=${amount}`;
 	const rates = await client.rates(CoinpaymentsRatesOpts);
-    console.log(rates);
+	console.log(rates);
 	res.json(rates);
 };
-
 
 //---------------ACA CREAMOS LA ORDEN------------------
 const createOrderCrypto = async function createOrderCrypto(req, res) {
 	const { ammount, status, prodCarrito, id } = req.body;
-    console.log(req.body)
+	console.log(req.body);
 
 	try {
 		var newOrder = await Order.create(
@@ -128,18 +129,18 @@ const createOrderCrypto = async function createOrderCrypto(req, res) {
 						}
 					})();
 				});
-		})
-        const orders = await Order.findAll()
-        const order = orders[orders.length-1]
-        order.userId = id
-        res.status(200).json(order)
+		});
+		const orders = await Order.findAll();
+		const order = orders[orders.length - 1];
+		order.userId = id;
+		res.status(200).json(order);
 	} catch (error) {
 		res.status(400).json(error);
 	}
 };
 
 //////////////////// Coinpayment IPN
- 
+
 // const ipnUpdate = async (req, res)=>{
 // 	try {
 // 		console.log(req.body)
@@ -150,9 +151,31 @@ const createOrderCrypto = async function createOrderCrypto(req, res) {
 // }
 
 const ipnUpdate = async (req, res, next) => {
-	console.log(req.body)
+	// type: ENUM('created', 'processing', 'cancelled', 'completed'),
+
+	// 	Payment Statuses
+	// Payments will post with a 'status' field, here are the currently defined values:
+
+	//     -2 = PayPal Refund or Reversal
+	//     -1 = Cancelled / Timed Out
+	//     0 = Waiting for buyer funds
+	//     1 = We have confirmed coin reception from the buyer
+	//     2 = Queued for nightly payout (if you have the Payout Mode for this coin set to Nightly)
+	//     3 = PayPal Pending (eChecks or other types of holds)
+	//     5 = In Escrow (if you are using SetEscrow)
+	//     100 = Payment Complete. We have sent your coins to your payment address or 3rd party payment system reports the payment complete
+
+	// For future-proofing your IPN handler you can use the following rules:
+
+	//     <0 = Failures/Errors
+	//     0-99 = Payment is Pending in some way
+	//     >=100 = Payment completed successfully
+
+	// IMPORTANT: You should never ship/release your product until the status is >= 100 OR == 2 (Queued for nightly payout)!
+
+	console.log(req.body);
 	const id = parseInt(req.body.custom);
-	const newStatus = req.body.status_text;
+	const newStatus = req.body.status_text.toLowerCase();
 
 	try {
 		const orderById = await Order.findOne({
@@ -161,8 +184,8 @@ const ipnUpdate = async (req, res, next) => {
 		const updatedStatus = await orderById.update({
 			status: newStatus,
 		});
-		console.log(orderById)
-		console.log(updatedStatus)
+		console.log(orderById);
+		console.log(updatedStatus);
 		res.status(200).json(updatedStatus.dataValues.status);
 	} catch (error) {
 		next(error);
@@ -171,12 +194,11 @@ const ipnUpdate = async (req, res, next) => {
 
 ////////////////////
 
-
 module.exports = {
 	getBasicInfo,
 	createTransaction,
 	getTransactionInfo,
-    getCoinRates,
-    createOrderCrypto,
-	ipnUpdate
+	getCoinRates,
+	createOrderCrypto,
+	ipnUpdate,
 };
