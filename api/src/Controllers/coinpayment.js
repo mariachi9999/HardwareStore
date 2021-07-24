@@ -150,6 +150,7 @@ const createOrderCrypto = async function createOrderCrypto(req, res) {
 // }
 
 const ipnUpdate = async (req, res, next) => {
+	console.log(req.body)
 	const id = parseInt(req.body.custom);
 	const newStatus = req.body.status_text;
 
@@ -160,7 +161,8 @@ const ipnUpdate = async (req, res, next) => {
 		const updatedStatus = await orderById.update({
 			status: newStatus,
 		});
-
+		console.log(orderById)
+		console.log(updatedStatus)
 		res.status(200).json(updatedStatus.dataValues.status);
 	} catch (error) {
 		next(error);
