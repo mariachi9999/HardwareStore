@@ -139,25 +139,33 @@ const createOrderCrypto = async function createOrderCrypto(req, res) {
 };
 
 //////////////////// Coinpayment IPN
+ 
+// const ipnUpdate = async (req, res)=>{
+// 	try {
+// 		console.log(req.body)
+// 		res.json(req.body)
+// 	} catch (error){
+// 		res.status(400).json(error);
+// 	}
+// }
 
-// let 
-//   CoinPayments = require('../lib'),
-//   express      = require('express'),
-//   bodyParser   = require('body-parser');
-    
-// let app = express();
- 
-// app.use(bodyParser.urlencoded({ extended: true }));
- 
-const ipnUpdate = async (req, res)=>{
+const ipnUpdate = async (req, res, next) => {
+	const id = parseInt(req.body.custom);
+	const newStatus = req.body.status_text;
+
 	try {
-		console.log(req.body)
-		res.json(req.body)
-	} catch (error){
-		res.status(400).json(error);
-	}
-}
+		const orderById = await Order.findOne({
+			where: { orderId: id },
+		});
+		const updatedStatus = await orderById.update({
+			status: newStatus,
+		});
 
+		res.status(200).json(updatedStatus.dataValues.status);
+	} catch (error) {
+		next(error);
+	}
+};
 
 ////////////////////
 
