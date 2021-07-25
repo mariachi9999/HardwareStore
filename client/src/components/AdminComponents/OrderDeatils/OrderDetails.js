@@ -35,7 +35,7 @@ const OrderDetails = () => {
 	};
 
 	React.useEffect(() => {
-		axios.put(`http://localhost:3001/orders/order/${id}`, {
+		axios.put(`https://ecommerceherni.herokuapp.com/orders/order/${id}`, {
 			status: orderStatus,
 		});
 	}, [orderStatus]);

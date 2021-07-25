@@ -1,7 +1,7 @@
 const { Op } = require('sequelize');
 const { OrderDetail, Product } = require('../../db');
 
-// http://localhost:3001/admin/listorders?page=1
+// https://ecommerceherni.herokuapp.com/admin/listorders?page=1
 /*
 	body {
 		limit: int (size of the page),
