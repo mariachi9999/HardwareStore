@@ -2,12 +2,10 @@ const Coinpayments = require('coinpayments');
 const { response } = require('express');
 const { Sequelize } = require('sequelize');
 const { Order, OrderDetail, Product, User } = require('../db');
+const axios = require('axios');
 
-const {
-	COINPAYMENT_API_PUBLIC,
-	COINPAYMENT_API_SECRET,
-	COINPAYMENT_MERCHAND_ID,
-} = process.env;
+
+const { COINPAYMENT_API_PUBLIC, COINPAYMENT_API_SECRET, COINPAYMENT_MERCHAND_ID } = process.env;
 
 const CoinpaymentsCredentials = {
 	key: '736e355aacd8db0db04f226da8d268fe22b3b87733de4ebec978c9c78893fe75',
@@ -51,9 +49,11 @@ const createTransaction = async (req, res) => {
 //Get Transaction Info
 const getTransactionInfo = async (req, res) => {
 	const CoinpaymentsGetTxOpts = {
-		txid: 'CPFG3DREYPWLFQMBWYKNZKPTOK',
+		txid: 'CPFG7VWCDRSUQWVAVPCTHOHJN5',
 		full: 0,
 	};
+
+	
 
 	const status = await client.getTx(CoinpaymentsGetTxOpts);
 	console.log(status);
@@ -64,27 +64,28 @@ const getTransactionInfo = async (req, res) => {
 const getCoinRates = async (req, res) => {
 	const CoinpaymentsRatesOpts = {
 		short: 1,
-		accepted: 2,
+		accepted: 2
 	};
 	const rates = await client.rates(CoinpaymentsRatesOpts);
-	console.log(rates);
+    console.log(rates);
 	res.json(rates);
 };
 
 //Get POS.
 const createPos = async (req, res) => {
-	const { amount } = req.body;
+    const {amount} = req.body
 
-	const pos = `https://www.coinpayments.net/index.php?cmd=_pos&reset=1&merchant=${COINPAYMENT_MERCHAND_ID}&item_name=Order+Payment&currency=ARS&allow_currency=1&amountf=${amount}`;
+    const pos = `https://www.coinpayments.net/index.php?cmd=_pos&reset=1&merchant=${COINPAYMENT_MERCHAND_ID}&item_name=Order+Payment&currency=ARS&allow_currency=1&amountf=${amount}`
 	const rates = await client.rates(CoinpaymentsRatesOpts);
-	console.log(rates);
+    console.log(rates);
 	res.json(rates);
 };
+
 
 //---------------ACA CREAMOS LA ORDEN------------------
 const createOrderCrypto = async function createOrderCrypto(req, res) {
 	const { ammount, status, prodCarrito, id } = req.body;
-	console.log(req.body);
+    console.log(req.body)
 
 	try {
 		var newOrder = await Order.create(
@@ -129,15 +130,16 @@ const createOrderCrypto = async function createOrderCrypto(req, res) {
 						}
 					})();
 				});
-		});
-		const orders = await Order.findAll();
-		const order = orders[orders.length - 1];
-		order.userId = id;
-		res.status(200).json(order);
+		})
+        const orders = await Order.findAll()
+        const order = orders[orders.length-1]
+        order.userId = id
+        res.status(200).json(order)
 	} catch (error) {
 		res.status(400).json(error);
 	}
 };
+
 
 //////////////////// Coinpayment IPN
 

@@ -86,7 +86,7 @@ function PutProduct() {
 		event.preventDefault();
 		try {
 			await axios
-				.put('https://ecommerceherni.herokuapp.com/admin/putproduct', product)
+				.put('http://localhost:3001/admin/putproduct', product)
 				.then(() => {
 					Swal.fire({
 						position: 'center',

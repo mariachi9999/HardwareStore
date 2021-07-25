@@ -105,7 +105,7 @@ function EditAccount({setOption}) {
                 console.log(user);
                 e.preventDefault()
                 try {
-                    await axios.put('https://ecommerceherni.herokuapp.com/admin/user/edit',user)
+                    await axios.put('http://localhost:3001/admin/user/edit',user)
                     .then(()=>{
                         Swal.fire({
                             position: 'center',
