@@ -26,7 +26,7 @@ function UserView() {
 	useEffect(() => {
 		dispatch(getUserOrders(userId));
 		dispatch(getProducts());
-	}, [dispatch]);
+	}, [dispatch, userId]);
 
 	function setOption(event) {
 		setSelectedOption(event.target.id);
