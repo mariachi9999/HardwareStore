@@ -1,7 +1,9 @@
-import { GET_USER_ORDERS } from '../actionsName';
+import { GET_USER_ORDERS, ADD_TO_FAVORITES, ADD_DATABASE_FAVORITES, REMOVE_FROM_FAVORITES} from '../actionsName';
 
 const initialState = {
 	userOrdersList: [],
+	userFavorites: JSON.parse(localStorage.getItem('userFavorites') || '[]')
+	
 };
 
 function userAccountReducer(state = initialState, action) {
@@ -13,16 +15,40 @@ function userAccountReducer(state = initialState, action) {
 				
 		// 	};
 		case GET_USER_ORDERS:
-			console.log('desdereducer orrders payloaddd',action.payload)
 			return {
 				...state,
 				userOrdersList: action.payload.map(el => {
 					let status = el.status
 					let orderId = el.orderDetails[0].orderId
-					let orderProducts = el.orderDetails.map(prod => prod.product)
+					let orderProducts = el.orderDetails.map(prod => {
+						let oldprice = prod.price
+						let prodinfo = prod.product
+						return {...prodinfo, oldprice}
+					})
 					return {orderId, status, orderProducts}
 				})
 			};
+
+		case ADD_TO_FAVORITES:
+			return {
+				...state,
+				userFavorites: state.userFavorites.concat(action.payload)
+				
+		};
+
+		// case ADD_DATABASE_FAVORITES:
+		// 	return {
+		// 		...state,
+		// 		userFavorites: action.payload
+				
+		// };
+
+		case REMOVE_FROM_FAVORITES:
+			return {
+				...state,
+				userFavorites: state.userFavorites.filter((prod) => prod.id !== action.payload.id),
+
+		};
 
 		default:
 			return state;
