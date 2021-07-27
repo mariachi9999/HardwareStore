@@ -141,6 +141,7 @@ const createOrderCrypto = async function createOrderCrypto(req, res) {
 
 const ipnUpdate = async (req, res, next) => {
 
+	console.log(req.body)
 
 	const id = parseInt(req.body.custom);
 	const newStatus = req.body.status_text;
