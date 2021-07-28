@@ -475,7 +475,7 @@ export function loginGmail(data) {
 			console.log(res);
 			dispatch({
 				type: SUCCESS_LOGIN,
-				payload: res.data[0],
+				payload: res.data,
 			});
 		} catch (error) {
 			console.log(error);
