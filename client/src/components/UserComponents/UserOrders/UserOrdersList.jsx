@@ -24,10 +24,6 @@ function UserOrdersList() {
 	const userId = useSelector((state) => state.user.userData.userId);
 	const userOrders = useSelector((state) => state.useraccount.userOrdersList);
 
-	useEffect(() => {
-		window.location.reload();
-	}, [userOrders]);
-
 	const [selOrderId, setOrderId] = useState(0);
 
 	let orderDetailInfo = userOrders.filter((el) => {
