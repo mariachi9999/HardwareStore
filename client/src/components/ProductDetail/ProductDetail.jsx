@@ -19,10 +19,12 @@ function DetailProduct(props) {
 
 	let [currentImage, setCurrentImage] = useState();
 
-	console.log(props)
-
+	let param = window.location.pathname
+	let id= parseInt(param.split('/catalog/')[1])
+	console.log(id)
+	
 	useEffect(() => {
-		dispatch(getProductById(props.match.params.id));
+		dispatch(getProductById(id));
 	}, []);
 
 	function handleClick(event, index) {
