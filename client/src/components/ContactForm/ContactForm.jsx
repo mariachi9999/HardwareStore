@@ -32,7 +32,7 @@ function ContactForm() {
 		onSubmit: async values => {
 			console.log(values);
 			try {
-				await axios.post('http://localhost:3001/users', {
+				await axios.post('https://ecommerceherni.herokuapp.com/users', {
 					name: values.name,
 					email: values.email,
 					subject: values.subject,

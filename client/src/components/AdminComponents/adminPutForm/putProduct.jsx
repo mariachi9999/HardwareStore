@@ -100,7 +100,7 @@ function PutProduct() {
 		event.preventDefault();
 		try {
 			await axios
-				.put('http://localhost:3001/admin/putproduct', {
+				.put('https://ecommerceherni.herokuapp.com/admin/putproduct', {
 					...product,
 					images: imagesFiles,
 				})
