@@ -65,9 +65,9 @@ const createOrder = async function createOrder(req, res) {
 				id: i.prodId,
 			})),
 			back_urls: {
-				success: 'https://e-commerce-copy.vercel.app/webhook',
-				failure: 'https://ecommerceherni.herokuapp.com/mercadopago/pagos',
-				pending: 'https://ecommerceherni.herokuapp.com/mercadopago/pagos',
+				success: 'http://localhost:3000/webhook',
+				failure: 'http://localhost:3001/mercadopago/pagos',
+				pending: 'http://localhost:3001/mercadopago/pagos',
 			},
 			auto_return: 'approved',
 		};

@@ -46,7 +46,7 @@ function Register() {
 		onSubmit: async (values) => {
 			console.log(values);
 			try {
-				await axios.post('https://ecommerceherni.herokuapp.com/users', {
+				await axios.post('http://localhost:3001/users', {
 					name: values.name,
 					surname: values.surname,
 					email: values.email,

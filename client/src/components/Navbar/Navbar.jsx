@@ -97,7 +97,7 @@ const Navbar = () => {
 
 	useEffect(() => {
 		axios
-			.get('https://ecommerceherni.herokuapp.com/products')
+			.get('http://localhost:3001/products')
 			.then((res) => {
 				const suggestions = res.data.map(({ name }) => name);
 				setOptions(suggestions);

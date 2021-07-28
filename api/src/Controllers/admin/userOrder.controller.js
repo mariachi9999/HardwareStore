@@ -1,7 +1,7 @@
 const { Op } = require('sequelize');
 const { User, Order } = require('../../db');
 
-// https://ecommerceherni.herokuapp.com/admin/usersandhisorders?page=0 (post);
+// http://localhost:3001/admin/usersandhisorders?page=0 (post);
 
 const userOrder = async (req, res, next) => {
 	let products = {};

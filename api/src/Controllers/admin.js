@@ -179,7 +179,7 @@ async function deleteProduct(req, res, next) {
 		next(error);
 	}
 }
-//https://ecommerceherni.herokuapp.com/admin/deletebrand/1
+//http://localhost:3001/admin/deletebrand/1
 async function deleteBrand(req, res, next) {
 	try {
 		const id = parseInt(req.params.id);
@@ -200,7 +200,7 @@ async function deleteBrand(req, res, next) {
 		next(error);
 	}
 }
-//https://ecommerceherni.herokuapp.com/admin/deletecategory/9
+//http://localhost:3001/admin/deletecategory/9
 async function deleteCategory(req, res, next) {
 	try {
 		const id = parseInt(req.params.id);

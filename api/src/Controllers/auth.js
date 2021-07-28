@@ -150,6 +150,7 @@ exports.resetPassword = async (req, res) => {
 };
 
 exports.authUserGmail = async (req, res) => {
+	console.log(req.body)
 	try {
 		const emailBody = req.body.email;
 		const passwordBody = req.body.password;

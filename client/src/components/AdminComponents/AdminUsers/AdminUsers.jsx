@@ -29,7 +29,7 @@ function AdminUsers() {
 	const handleDelete = async (email, event) => {
 		try {
 			await axios
-				.put('https://ecommerceherni.herokuapp.com/admin/user/delete', { email: email })
+				.put('http://localhost:3001/admin/user/delete', { email: email })
 				.then(() => {
 					Swal.fire({
 						position: 'center',

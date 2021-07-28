@@ -53,6 +53,7 @@ const LogIn = () => {
 	const [userInfo, setUserInfo] = useState({});
 
 	const responseGoogle = (response) => {
+		console.log(response)
 		if (response.tokenId) {
 			setUserInfo({
 				email: response.profileObj.email,

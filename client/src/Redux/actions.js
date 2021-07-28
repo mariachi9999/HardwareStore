@@ -78,7 +78,7 @@ export const userMessage = (message) => async (dispatch) => {
 
 export const createSession = () => async (dispatch) => {
 	try {
-		const res = await axios.get('https://ecommerceherni.herokuapp.com/watson/session');
+		const res = await axios.get('http://localhost:3001/watson/session');
 		dispatch({ type: SESSION_SUCCESS, payload: res.data });
 	} catch (err) {
 		dispatch({ type: SESSION_FAIL });
@@ -88,7 +88,7 @@ export const createSession = () => async (dispatch) => {
 export const sendMessage = (message) => async (dispatch) => {
 	try {
 		const body = { input: message };
-		const res = await axios.post('https://ecommerceherni.herokuapp.com/watson/message', body);
+		const res = await axios.post('http://localhost:3001/watson/message', body);
 		console.log('data from api:', res.data.output.generic[0].text);
 		dispatch({
 			type: MESSAGE_SUCCESS,
@@ -208,7 +208,7 @@ export function getListOfProductTable(page, object) {
 		try {
 			dispatch(fetchPending());
 			const res = await axios.post(
-				`https://ecommerceherni.herokuapp.com/admin/tablepagination?page=${page}`,
+				`http://localhost:3001/admin/tablepagination?page=${page}`,
 				object
 			);
 			dispatch(fetchListProducts(res.data));
@@ -218,13 +218,13 @@ export function getListOfProductTable(page, object) {
 	};
 }
 
-// https://ecommerceherni.herokuapp.com/admin/usersandhisorders?page=0 (post);
+// http://localhost:3001/admin/usersandhisorders?page=0 (post);
 export function getUserWithOrdersDetail(page, object) {
 	return async (dispatch) => {
 		try {
 			dispatch(fetchPending());
 			const res = await axios.post(
-				`https://ecommerceherni.herokuapp.com/admin/usersandhisorders?page=${page}`,
+				`http://localhost:3001/admin/usersandhisorders?page=${page}`,
 				object
 			);
 			dispatch(fetchUserWithOrders(res.data));
@@ -239,7 +239,7 @@ export function getProductWithOrderData(page, object) {
 		try {
 			dispatch(fetchPending());
 			const res = await axios.post(
-				`https://ecommerceherni.herokuapp.com/admin/listorders?page=${page}`,
+				`http://localhost:3001/admin/listorders?page=${page}`,
 				object
 			);
 			dispatch(fetchProductWithOrder(res.data));
@@ -253,7 +253,7 @@ export function getCountOfBrand() {
 	return async (dispatch) => {
 		try {
 			dispatch(fetchPending());
-			const res = await axios.get(`https://ecommerceherni.herokuapp.com/admin/countofbrand`);
+			const res = await axios.get(`http://localhost:3001/admin/countofbrand`);
 			dispatch(fetchCountOfBrand(res.data));
 		} catch (error) {
 			dispatch(fetchError(error));
@@ -266,7 +266,7 @@ export function getOrderDetails(id) {
 		try {
 			dispatch(fetchPending());
 			const res = await axios.get(
-				`https://ecommerceherni.herokuapp.com/admin/dataaboutorder/${id}`
+				`http://localhost:3001/admin/dataaboutorder/${id}`
 			);
 			dispatch(fetchOrderDetails(res.data));
 		} catch (error) {
@@ -280,7 +280,7 @@ export function getCountOfCategories() {
 		try {
 			dispatch(fetchPending());
 			const res = await axios.get(
-				`https://ecommerceherni.herokuapp.com/admin/categoriescount`
+				`http://localhost:3001/admin/categoriescount`
 			);
 			dispatch(fetchCountOfCategories(res.data));
 		} catch (error) {
@@ -293,7 +293,7 @@ export function getSuggestions(name) {
 	return async (dispatch) => {
 		try {
 			dispatch(fetchPending());
-			const res = await axios.get('https://ecommerceherni.herokuapp.com/products/');
+			const res = await axios.get('http://localhost:3001/products/');
 			dispatch(fetchSuggestions({ productSuggestions: res.data, name }));
 		} catch (error) {
 			dispatch(fetchError(error));
@@ -303,7 +303,7 @@ export function getSuggestions(name) {
 
 export function getProducts() {
 	return async (dispatch) => {
-		axios.get('https://ecommerceherni.herokuapp.com/products/').then((response) => {
+		axios.get('http://localhost:3001/products/').then((response) => {
 			dispatch({ type: GET_PRODUCTS, payload: response.data });
 		});
 	};
@@ -311,7 +311,7 @@ export function getProducts() {
 
 export function getCategories() {
 	return async (dispatch) => {
-		axios.get('https://ecommerceherni.herokuapp.com/categories/').then((response) => {
+		axios.get('http://localhost:3001/categories/').then((response) => {
 			dispatch({ type: GET_CATEGORIES, payload: response.data });
 		});
 	};
@@ -319,7 +319,7 @@ export function getCategories() {
 
 export function getBrands() {
 	return async (dispatch) => {
-		axios.get('https://ecommerceherni.herokuapp.com/brands/').then((response) => {
+		axios.get('http://localhost:3001/brands/').then((response) => {
 			dispatch({ type: GET_BRANDS, payload: response.data });
 		});
 	};
@@ -328,7 +328,7 @@ export function getBrands() {
 export function getProductById(id) {
 	return async (dispatch) => {
 		axios
-			.get('https://ecommerceherni.herokuapp.com/products/allproducts/' + id)
+			.get('http://localhost:3001/products/allproducts/' + id)
 			.then((response) => {
 				dispatch({ type: PRODUCT_DETAIL, payload: response.data });
 			});
@@ -337,7 +337,7 @@ export function getProductById(id) {
 
 export function getHighlightProd() {
 	return async (dispatch) => {
-		axios.get('https://ecommerceherni.herokuapp.com/products').then((response) => {
+		axios.get('http://localhost:3001/products').then((response) => {
 			dispatch({ type: GET_HIGHLIGHTS, payload: response.data });
 		});
 	};
@@ -346,7 +346,7 @@ export function getHighlightProd() {
 export function logIn(dato) {
 	return async (dispatch) => {
 		try {
-			const res = await axios.post('https://ecommerceherni.herokuapp.com/auth', dato);
+			const res = await axios.post('http://localhost:3001/auth', dato);
 			console.log('login', res.data);
 			dispatch({
 				type: SUCCESS_LOGIN,
@@ -384,7 +384,7 @@ export function authUser(data) {
 		}
 
 		try {
-			const res = await axios.get('https://ecommerceherni.herokuapp.com/auth');
+			const res = await axios.get('http://localhost:3001/auth');
 			console.log(res.data.msg.message);
 			if (res.data.user) {
 				dispatch({
@@ -415,7 +415,7 @@ export function forgotPassword(email) {
 	return async (dispatch) => {
 		try {
 			const res = await axios.put(
-				'https://ecommerceherni.herokuapp.com/auth/forgot-password',
+				'http://localhost:3001/auth/forgot-password',
 				{ email }
 			);
 			let hola = res.data.msg;
@@ -443,7 +443,7 @@ export function forgotPassword(email) {
 export function resetPassword(resetLink, newPass) {
 	return async (dispatch) => {
 		try {
-			await axios.put('https://ecommerceherni.herokuapp.com/auth/reset-password', {
+			await axios.put('http://localhost:3001/auth/reset-password', {
 				resetLink,
 				newPass,
 			});
@@ -471,7 +471,7 @@ export function resetPassword(resetLink, newPass) {
 export function loginGmail(data) {
 	return async (dispatch) => {
 		try {
-			const res = await axios.post('https://ecommerceherni.herokuapp.com/authGmail', data);
+			const res = await axios.post('http://localhost:3001/authGmail', data);
 			console.log(res);
 			dispatch({
 				type: SUCCESS_LOGIN,
@@ -504,7 +504,7 @@ export function getFilteredProducts(query) {
 	return async (dispatch) => {
 		axios
 			.get(
-				`https://ecommerceherni.herokuapp.com/catalog?category=${category}&brand=${brand}&price=${price}&page=${page}&qty=${qty}&stock=${stock}`
+				`http://localhost:3001/catalog?category=${category}&brand=${brand}&price=${price}&page=${page}&qty=${qty}&stock=${stock}`
 			)
 			.then((response) => {
 				dispatch({ type: FILTERED_PRODUCTS, payload: response.data });
@@ -561,7 +561,7 @@ export const loadCurrentItem = (itemId) => {
 export function modifyProduct(elem) {
 	return async () => {
 		try {
-			await axios.put('https://ecommerceherni.herokuapp.com/admin/putproduct', elem);
+			await axios.put('http://localhost:3001/admin/putproduct', elem);
 		} catch (error) {
 			console.log(error);
 		}
@@ -571,7 +571,7 @@ export function modifyProduct(elem) {
 export function modifyCateogry(elem) {
 	return async () => {
 		try {
-			await axios.put('https://ecommerceherni.herokuapp.com/admin/putcategory', elem);
+			await axios.put('http://localhost:3001/admin/putcategory', elem);
 		} catch (error) {
 			console.log(error);
 		}
@@ -581,7 +581,7 @@ export function modifyCateogry(elem) {
 export function modifyBrand(elem) {
 	return async () => {
 		try {
-			await axios.put('https://ecommerceherni.herokuapp.com/admin/putbrand', elem);
+			await axios.put('http://localhost:3001/admin/putbrand', elem);
 		} catch (error) {
 			console.log(error);
 		}
@@ -591,7 +591,7 @@ export function modifyBrand(elem) {
 export function createdBrand(elem) {
 	return async () => {
 		try {
-			await axios.post('https://ecommerceherni.herokuapp.com/admin/createdbrand', elem);
+			await axios.post('http://localhost:3001/admin/createdbrand', elem);
 		} catch (error) {
 			console.log(error);
 		}
@@ -601,7 +601,7 @@ export function createdBrand(elem) {
 export function createdCategory(elem) {
 	return async () => {
 		try {
-			await axios.post('https://ecommerceherni.herokuapp.com/admin/addCategory', elem);
+			await axios.post('http://localhost:3001/admin/addCategory', elem);
 		} catch (error) {
 			console.log(error);
 		}
@@ -611,17 +611,17 @@ export function createdCategory(elem) {
 export function createdProduct(elem) {
 	return async () => {
 		try {
-			await axios.post('https://ecommerceherni.herokuapp.com/admin/addproduct', elem);
+			await axios.post('http://localhost:3001/admin/addproduct', elem);
 		} catch (error) {
 			console.log(error);
 		}
 	};
 }
-//https://ecommerceherni.herokuapp.com/admin/deletebrand/27
+//http://localhost:3001/admin/deletebrand/27
 export function deleProduct(id) {
 	return async () => {
 		try {
-			await axios.delete(`https://ecommerceherni.herokuapp.com/admin/deleteproduct/${id}`);
+			await axios.delete(`http://localhost:3001/admin/deleteproduct/${id}`);
 		} catch (error) {
 			console.log(error);
 		}
@@ -631,7 +631,7 @@ export function deleProduct(id) {
 export function deleBrand(id) {
 	return async () => {
 		try {
-			await axios.delete(`https://ecommerceherni.herokuapp.com/admin/deletebrand/${id}`);
+			await axios.delete(`http://localhost:3001/admin/deletebrand/${id}`);
 		} catch (error) {
 			console.log(error);
 		}
@@ -641,7 +641,7 @@ export function deleBrand(id) {
 export function deleCategory(id) {
 	return async () => {
 		try {
-			await axios.delete(`https://ecommerceherni.herokuapp.com/admin/deletecategory/${id}`);
+			await axios.delete(`http://localhost:3001/admin/deletecategory/${id}`);
 		} catch (error) {
 			console.log(error);
 		}
@@ -650,7 +650,7 @@ export function deleCategory(id) {
 
 export function getUsers() {
 	return async (dispatch) => {
-		axios.get('https://ecommerceherni.herokuapp.com/admin/users').then((response) => {
+		axios.get('http://localhost:3001/admin/users').then((response) => {
 			dispatch({ type: GET_USERS, payload: response.data });
 		});
 	};
@@ -658,7 +658,7 @@ export function getUsers() {
 
 export function getUserToEdit(email) {
 	return async (dispatch) => {
-		axios.get(`https://ecommerceherni.herokuapp.com/admin/user/${email}`).then((response) => {
+		axios.get(`http://localhost:3001/admin/user/${email}`).then((response) => {
 			dispatch({ type: GET_USER_TO_EDIT, payload: response.data });
 		});
 	};
@@ -671,7 +671,7 @@ export function postCart(data) {
 
 		try {
 			const res = await axios.post(
-				'https://ecommerceherni.herokuapp.com/mercadopago/createorder',
+				'http://localhost:3001/mercadopago/createorder',
 				data
 			);
 
@@ -690,7 +690,7 @@ export function getPayInfo(data) {
 		console.log(data);
 
 		try {
-			const res = await axios.post('https://ecommerceherni.herokuapp.com/webhooks', { data });
+			const res = await axios.post('http://localhost:3001/webhooks', { data });
 
 			console.log(res.data);
 			dispatch({
@@ -708,7 +708,7 @@ export function getPayInfo(data) {
 export function getUserOrders(userId) {
 	return async (dispatch) => {
 		axios
-			.get(`https://ecommerceherni.herokuapp.com/orders/order/user/${userId}`)
+			.get(`http://localhost:3001/orders/order/user/${userId}`)
 			.then((response) => {
 				dispatch({ type: GET_USER_ORDERS, payload: response.data });
 			});
@@ -719,7 +719,7 @@ export function postCartUser(data) {
 	console.log(data);
 	return async (dispatch) => {
 		try {
-			const res = axios.post('https://ecommerceherni.herokuapp.com/shoppingcart', data);
+			const res = axios.post('http://localhost:3001/shoppingcart', data);
 			console.log(res);
 		} catch (error) {
 			console.log(error.response);
@@ -731,7 +731,7 @@ export function getCartUser(id) {
 	return async (dispatch) => {
 		try {
 			const res = await axios.post(
-				'https://ecommerceherni.herokuapp.com/shoppingcart/userCart',
+				'http://localhost:3001/shoppingcart/userCart',
 				{ userId: id }
 			);
 			console.log('id', res.data);
@@ -762,7 +762,7 @@ export const removeFavorites = (prod) => {
 export const postUserFavorites = (userId, favorites) => {
 	return async (dispatch) => {
 		try {
-			const res = await axios.post(`https://ecommerceherni.herokuapp.com/favorites`, {
+			const res = await axios.post(`http://localhost:3001/favorites`, {
 				userId: userId,
 				prodId: favorites,
 			});
@@ -780,7 +780,7 @@ export const getUserFavorites = (userId) => {
 	return async (dispatch) => {
 		try {
 			const res = await axios.get(
-				`https://ecommerceherni.herokuapp.com/favorites/user/${userId}`
+				`http://localhost:3001/favorites/user/${userId}`
 			);
 			console.log('FAVORITES FORM REDUCER', res.data);
 			dispatch({
@@ -828,7 +828,7 @@ export function postCartCrypto(data) {
 
 		try {
 			const res = await axios.post(
-				'https://ecommerceherni.herokuapp.com/coinpayment/createorder',
+				'http://localhost:3001/coinpayment/createorder',
 				data
 			);
 
@@ -854,7 +854,7 @@ export function getRates() {
 	return async (dispatch) => {
 
 		try {
-			const res = await axios.get('https://ecommerceherni.herokuapp.com/coinpayment/rate');
+			const res = await axios.get('http://localhost:3001/coinpayment/rate');
 			dispatch({
 				type: GET_RATES,
 				payload: res.data,
