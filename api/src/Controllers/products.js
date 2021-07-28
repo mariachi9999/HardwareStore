@@ -101,6 +101,7 @@ const getAllProducts = async function getAllProducts(req, res, next) {
 const getIdProduct = async function getIdProduct(req, res, next) {
 	try {
 		const id = parseInt(req.params.id);
+		console.log(id)
 		const IdProduct = await Product.findOne({
 			include: [{ model: Brand }, { model: Category }, { model: Image }],
 			where: {
