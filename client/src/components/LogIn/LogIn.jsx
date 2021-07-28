@@ -58,6 +58,8 @@ const LogIn = () => {
 			setUserInfo({
 				email: response.profileObj.email,
 				password: response.accessToken,
+				name: response.profileObj.givenName,
+				surname: response.profileObj.familyName
 			});
 		}
 	};

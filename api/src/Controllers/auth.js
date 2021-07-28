@@ -154,7 +154,9 @@ exports.authUserGmail = async (req, res) => {
 	try {
 		const emailBody = req.body.email;
 		const passwordBody = req.body.password;
-
+		const nameBody = req.body.name;
+		const surnameBody = req.body.surname;
+		
 		let user = await User.findOrCreate({
 			where: {
 				email: emailBody,
@@ -162,6 +164,8 @@ exports.authUserGmail = async (req, res) => {
 			defaults: {
 				email: emailBody,
 				password: passwordBody,
+				name: nameBody,
+				surname: surnameBody
 			},
 		});
 		const token = jwt.sign(
