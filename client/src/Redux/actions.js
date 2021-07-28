@@ -62,7 +62,7 @@ import {
 	SESSION_FAIL,
 	MESSAGE_SUCCESS,
 	MESSAGE_FAIL,
-	ORDER_DISPATCHED,
+	ORDER_DISPATCHED
 } from './actionsName';
 
 import axios from 'axios';
@@ -576,10 +576,10 @@ export function createdCategory(elem) {
 	};
 }
 
-export function createdProduct(elem) {
+export function createdProduct(elem, aux) {
 	return async () => {
 		try {
-			await axios.post('https://ecommerceherni.herokuapp.com/admin/addproduct', elem);
+			await axios.post('https://ecommerceherni.herokuapp.com/admin/addproduct', [elem, aux]);
 		} catch (error) {
 			console.log(error);
 		}
@@ -660,16 +660,20 @@ export function getPayInfo(data) {
 		try {
 			const res = await axios.post('https://ecommerceherni.herokuapp.com/webhooks', { data });
 
-			console.log(res.data);
-			dispatch({
-				type: GET_PAY,
-				payload: res.data
-			});
 		} catch (error) {
 			console.log(error);
 		}
 	};
 }
+
+export function deleteCart(data) {
+	return async (dispatch) => {
+			dispatch({
+				type: GET_PAY,
+			});
+	};
+}
+
 
 ////////////////////// USER ACCOUNT ACTIONS  ////////////////////
 
@@ -702,7 +706,7 @@ export function getCartUser(id) {
 				'https://ecommerceherni.herokuapp.com/shoppingcart/userCart',
 				{ userId: id }
 			);
-			
+
 			dispatch({
 				type: CREATE_CART_USER,
 				payload: res.data
@@ -778,7 +782,6 @@ export function saveAmmount(ammount) {
 		});
 	};
 }
-
 
 ////////////////////////// Solo se usa en proyecto deployeado
 export function setAuthentication(payload) {
