@@ -19,6 +19,8 @@ function DetailProduct(props) {
 
 	let [currentImage, setCurrentImage] = useState();
 
+	console.log(props)
+
 	useEffect(() => {
 		dispatch(getProductById(props.match.params.id));
 	}, []);
