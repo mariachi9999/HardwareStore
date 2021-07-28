@@ -160,7 +160,7 @@ const ipnUpdate = async (req, res, next) => {
 			var updatedStatus = await orderById.update({
 				status: 'cancelled',
 			});
-		} else {
+		} else if (newStatus>=0 && newStatus<100){
 			var updatedStatus = await orderById.update({
 				status: 'processing',
 			});
