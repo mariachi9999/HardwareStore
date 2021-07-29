@@ -5,9 +5,10 @@ const { Order, OrderDetail, Product, User } = require('../db');
 //---------------ACA CREAMOS LA ORDEN------------------
 const createOrder = async function createOrder(req, res) {
 	const { ammount, status, address, prodCarrito, id } = req.body;
-	console.log(req.body)
+	// console.log(req.body)
+	let orderId
 	try {
-		await Order.create(
+	const order = await Order.create(
 			{
 				ammount,
 				status,
@@ -17,6 +18,8 @@ const createOrder = async function createOrder(req, res) {
 				fields: ['ammount', 'status', 'address'],
 			}
 		).then((order) => {
+			ordenId= order.dataValues.orderId
+			// console.log('RESPUESTA',order)
 			prodCarrito &&
 				prodCarrito.forEach((prod) => {
 					(async function createOrderDetail() {
@@ -51,10 +54,13 @@ const createOrder = async function createOrder(req, res) {
 						}
 					})();
 				});
-		});
+			
+		})
 
+		console.log('RESPUESTA',ordenId)
 		//--------------ACA SE CREA LA PREFERENCIA PARA MANDAR A MERCADO PAGO-----------------
 
+		
 		let preference = {
 			items: prodCarrito.map((i) => ({
 				title: i.name,
@@ -68,6 +74,9 @@ const createOrder = async function createOrder(req, res) {
 				pending: 'https://ecommerceherni.herokuapp.com/mercadopago/pagos',
 			},
 			auto_return: 'approved',
+			external_reference:  `${ordenId}`,
+			notification_url: 'https://ecommerceherni.herokuapp.com/mercadopago/ipn'
+
 		};
 
 		mercadopago.preferences
