@@ -39,6 +39,12 @@ const createOrder = async function createOrder(req, res) {
 
 						if (productFind) {
 							await newDetail.setProduct(productFind.dataValues.id);
+					
+							 let count = productFind.dataValues.stock - prod.qty
+					
+							await productFind.update({
+							stock: 	count
+							})
 						}
 						await order.addOrderDetail(newDetail.dataValues.id);
 
@@ -57,7 +63,7 @@ const createOrder = async function createOrder(req, res) {
 			
 		})
 
-		console.log('RESPUESTA',ordenId)
+		// console.log('RESPUESTA',ordenId)
 		//--------------ACA SE CREA LA PREFERENCIA PARA MANDAR A MERCADO PAGO-----------------
 
 		
@@ -75,8 +81,7 @@ const createOrder = async function createOrder(req, res) {
 			},
 			auto_return: 'approved',
 			external_reference:  `${ordenId}`,
-			notification_url: 'https://ecommerceherni.herokuapp.com/mercadopago/ipn'
-
+			notification_url: 'https://ecommerceherni.herokuapp.com/mercadopago/ipn',
 		};
 
 		mercadopago.preferences
@@ -102,8 +107,6 @@ const ipnMPUpdate = async (req, res, next) => {
 	// item_number=userId
 	// custom=orderId
 	console.log('tigjdfsijfjid')
-	console.log(req.body)
-	res.send('OK')
 
 	// const id = parseInt(req.body.custom);
 	// const newStatus = parseInt(req.body.status);
