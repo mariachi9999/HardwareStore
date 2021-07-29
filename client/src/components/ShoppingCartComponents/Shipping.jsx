@@ -3,7 +3,7 @@ import Swal from 'sweetalert2';
 import Button from '../StyledComponents/ButtonRedOther';
 import styled from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux';
-import { postCart, postCartCrypto, saveAddress } from '../../Redux/actions';
+import { deleteCart, postCart, postCartCrypto, saveAddress } from '../../Redux/actions';
 import style from './SubTotal/SubTotal.module.css';
 import { useHistory } from 'react-router-dom';
 import './Shipping.css'
@@ -144,6 +144,7 @@ const Shipping = () => {
 		});
 		history.push('/catalog');
 		dispatch(postCartCrypto(bodyObject));
+		dispatch(deleteCart());
 	};
 
 	return (
@@ -267,7 +268,7 @@ const Shipping = () => {
 							</div>
 							<div>
 								<form>
-									<div className='d-flex justify-content-center m-2'>
+									<div className={window.screen.width > 430 ? 'd-flex justify-content-center m-3' : 'buttonsContain'}>
 										<button
 											onClick={handleClickMP}
 											className={style.paymentButton}
@@ -293,5 +294,3 @@ const Shipping = () => {
 };
 
 export default Shipping;
-
-// onClick={() => setAdd(null)}
