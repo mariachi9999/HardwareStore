@@ -38,7 +38,7 @@ function FilterBrands() {
 			: setBrandChecked('');
 	};
 
-	if (category && category.length > 0) {
+	if (category && category.length > 0 && products) {
 		var allProducts = products.filter(
 			(product) => product.categories[0].name === category
 		);
