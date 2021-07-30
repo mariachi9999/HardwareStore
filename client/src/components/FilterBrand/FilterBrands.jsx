@@ -7,18 +7,12 @@ import './index.css'
 
 function FilterBrands() {
 	const BrandName = useSelector((state) => state.brands.allBrands);
-
 	const category = useSelector((state) => state.category.selectedCategory);
-
 	const products = useSelector((state) => state.product.allProducts);
 	const dispatch = useDispatch();
 	const [brandChecked, setBrandChecked] = useState('');
 
 	useEffect(() => unCheck(brandChecked), [brandChecked]);
-	// useEffect(
-	// 	() => dispatch(filterBrand(brandChecked)),
-	// 	[dispatch, brandChecked]
-	// );
 
 	useEffect(() => {
 		dispatch(filterBrand(brandChecked));
@@ -38,8 +32,11 @@ function FilterBrands() {
 			: setBrandChecked('');
 	};
 
+	let allProducts = []
+	let result = []
+
 	if (category && category.length > 0 && products) {
-		var allProducts = products && products.filter(
+		allProducts = products && products.filter(
 			(product) => product.categories[0].name === category
 		);
 
@@ -52,7 +49,7 @@ function FilterBrands() {
 			}
 		}
 		const dataArr = new Set(array);
-		var result = [...dataArr];
+		result = [...dataArr];
 	}
 
 	return (
