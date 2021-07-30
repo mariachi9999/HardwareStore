@@ -56,9 +56,9 @@ function Products() {
 			qty: productsPerPage,
 			stock: stockS
 		});
-		// return () => {
-		// 	dispatch(cleanFilters());
-		// };
+		return () => {
+			dispatch(cleanFilters());
+		};
 	}, []);
 
 	useEffect(() => {
