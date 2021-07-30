@@ -39,7 +39,7 @@ function FilterBrands() {
 	};
 
 	if (category && category.length > 0 && products) {
-		var allProducts = products.filter(
+		var allProducts = products && products.filter(
 			(product) => product.categories[0].name === category
 		);
 
