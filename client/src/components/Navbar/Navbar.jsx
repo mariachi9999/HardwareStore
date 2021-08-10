@@ -52,6 +52,7 @@ const Navbar = () => {
 
 	//CARRITO
 	const [cartCount, SetCartCount] = useState(0);
+	const [favCount, SetFavCount] = useState(0);
 	const authenticated = useSelector(state => state.user.authenticated);
 	const cart = useSelector(state => state.cart.cart);
 
@@ -76,10 +77,16 @@ const Navbar = () => {
 
 	//FAVORITES
 	const favorites = useSelector(state => state.useraccount.userFavorites);
-
 	useEffect(() => {
+		let count = 0;
+		if (favorites) {
+			favorites.forEach(() => {
+				count = count + 1;
+			});
+		}
+		SetFavCount(count);
 		localStorage.setItem('userFavorites', JSON.stringify(favorites));
-	}, [favorites]);
+	}, [favorites, favCount]);
 
 	useEffect(() => {
 		if (authenticated) {
@@ -136,24 +143,31 @@ const Navbar = () => {
 		}
 	};
 	const handleClick = () => {
-			axios.put('https://ecommerceherni.herokuapp.com/favorites/user/favoritesupdate', {userId, favorites})
-			.then((res) => {
+		axios
+			.put('https://ecommerceherni.herokuapp.com/favorites/user/favoritesupdate', {
+				userId,
+				favorites
+			})
+			.then(res => {
 				console.log(res);
 			})
-			.catch((error) => console.log(error));
+			.catch(error => console.log(error));
 
-			axios.put('https://ecommerceherni.herokuapp.com/shoppingcart/userCart/update', {userId, cart})
-			.then((res) => {
+		axios
+			.put('https://ecommerceherni.herokuapp.com/shoppingcart/userCart/update', {
+				userId,
+				cart
+			})
+			.then(res => {
 				console.log(res);
 			})
-			.catch((error) => console.log(error));
+			.catch(error => console.log(error));
 
-			setTimeout(() => {
-				dispatch(logOut());
-				history.push('/');
-				window.location.reload();
-			}, 1500);
-		
+		setTimeout(() => {
+			dispatch(logOut());
+			history.push('/');
+			window.location.reload();
+		}, 1500);
 	};
 
 	return (
@@ -237,7 +251,7 @@ const Navbar = () => {
 							{Array.isArray(userName) ? (
 								<p
 									className={
-										window.screen.width > 430 ? 'text-white h6' : 'HiUser'
+										window.screen.width > 570 ? 'text-white h6' : 'HiUser'
 									}
 								>
 									Hi, {userName.email}!
@@ -245,7 +259,7 @@ const Navbar = () => {
 							) : (
 								<p
 									className={
-										window.screen.width > 430 ? 'text-white h6' : 'HiUser'
+										window.screen.width > 570 ? 'text-white h6' : 'HiUser'
 									}
 								>
 									Hi, {userName.name}!
@@ -261,6 +275,11 @@ const Navbar = () => {
 					<div className={styles.IconsContainer}>
 						<div className={styles.favHeartContainer}>
 							<FavModal />
+							{favCount !== 0 ? (
+								<div className={styles.countFav}>
+									<p>{favCount}</p>
+								</div>
+							) : null}
 						</div>
 
 						<div className={styles.cartLogoContainer}>
